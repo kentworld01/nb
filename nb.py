@@ -2052,9 +2052,6 @@ if __name__ == '__main__':
     #cmd( "sound", ":study" )
     #cmd( "auto", "user/小学/电子课本/ttb.p".decode('utf8') )
     #cmd( "auto", "user/小学/电子课本/xbzyy8s308.p".decode('utf8') )
-    #cmd( "auto", "user/小学/电子课本/xbzyy8s308.zip".decode('utf8') )
-    #cmd( "auto", "user/小学/电子课本/algjseyy1.zip".decode('utf8') )
-    #cmd( "auto", "user/小学/电子课本/bsdsx3a09.zip".decode('utf8') )
 
     g_qmlRoot.cmd.connect( cmd )
     g_view.setMinimumWidth(1024)
