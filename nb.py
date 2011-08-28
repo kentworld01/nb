@@ -213,6 +213,25 @@ Rectangle{
             // for debug value
             my += 16
             if( exercise_no >= 0 ){
+                doSelectPoint_exercise( x,y,mx,my,cmd_type, cmd_str )
+            }
+            else{
+                if( x + 400 > 1024 )    x = 1024 - 400
+                if( y + 100 > 768 )    y = 768 - 100
+                info_win.x = x
+                info_win.y = y
+                console.log( page.state )
+                if( page.state == "move" )
+                    page.state = ""
+                else 
+                    page.state = "move"
+            }
+        }
+        function doSelectPoint_exercise( x,y, mx, my, cmd_type, cmd_str ){
+            console.log( "text book do Select point" )
+            // for debug value
+            my += 16
+            if( exercise_no >= 0 ){
                 var next_flag = 0
                 var lines = page.exercise_string.split( '|' )
                 var count = lines.length
@@ -259,15 +278,6 @@ Rectangle{
                 }
             }
             else{
-                if( x + 400 > 1024 )    x = 1024 - 400
-                if( y + 100 > 768 )    y = 768 - 100
-                info_win.x = x
-                info_win.y = y
-                console.log( page.state )
-                if( page.state == "move" )
-                    page.state = ""
-                else 
-                    page.state = "move"
             }
         }
         width:1192
@@ -279,6 +289,10 @@ Rectangle{
             onClicked:{
                 info_win.x = 0
                 info_win.y = -100
+                console.log( "bg click" )
+                //console.log( mouse.x )
+                //console.log( mouse.y )
+                doSelectPoint_exercise( 0,0,mouse.x,mouse.y,"", "" )
             }
             onEntered: { page_command.state = "move" }
         }
