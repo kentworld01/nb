@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
 		<file>nb\Button.qml</file>
+		<file>nb\Cell.qml</file>
+		<file>nb\Cell1.qml</file>
 		<file>nb\DictView.qml</file>
 		<file>nb\DirHtmlView.qml</file>
 		<file>nb\DirList.qml</file>
@@ -40,11 +42,11 @@
 		<file>nb\images\scrollbar.png</file>
 		<file>nb\images\sun.png</file>
 		<file>nb\images\tb_page_command.png</file>
+		<file>nb\images\text_book_main.png</file>
 		<file>nb\images\Thumbs.db</file>
 		<file>nb\images\titlebar-bg.png</file>
 		<file>nb\images\view-refresh.png</file>
 		<file>nb\images\x.png</file>
-		<file>nb\menu\.main.qml.swp</file>
 		<file>nb\menu\app.png</file>
 		<file>nb\menu\bg.jpg</file>
 		<file>nb\menu\main.qml</file>

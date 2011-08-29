@@ -53,7 +53,8 @@ Rectangle {
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked: { 
-                        doSelect( "auto", cmd ) 
+                        doSelect( cmd_type, cmd ) 
+                        //doSelect( "auto", cmd ) 
                     }
                     onEntered: {
                         list.currentIndex = index

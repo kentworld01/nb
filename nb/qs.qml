@@ -34,11 +34,11 @@ Rectangle
             function key_press(event){
                 console.log( event.key )
                 if (event.key == Qt.Escape ) { 
-                    console.log( "----" )
+                    //console.log( "----" )
                     cmd( "quit", "" ) 
                 }
                 if (event.key == 16777216 ) { 
-                    console.log( "----" )
+                    //console.log( "----" )
                     cmd( "quit", "" ) 
                 }
             }
