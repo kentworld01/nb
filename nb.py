@@ -1737,6 +1737,7 @@ def get_qml_test_string( str ):
 
 def file_name_tran( str ):
     str = str.replace( "'", "\\'" )
+    str = str.lower()
     return str
 
 def os_listdir( dir ):
@@ -1941,19 +1942,22 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
             #print( u'课文朗读'.encode('gbk') )
             sfn = u"%s%s"%(path, u'课文朗读cks.txt' )
             #print sfn
-            slines = zf_extractfile( zf, sfn ).split( "\n" )
-            for l in slines:
-                l = chop(l)
-                l = l.decode( 'gbk' )
-                iis = l.split( '\t' )
-                if len( iis ) >= 4 :
-                    item = doc.createElement( 'rc' )
-                    rc_root.appendChild( item )
-                    item.setAttribute( 'pos', iis[0] )
-                    item.setAttribute( 'sound', "%s"%(iis[1]) )
-                    #item.setAttribute( 'sound', "%smp3/%s.mp3"%(g_zf_path,iis[1]) )
-                    item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[2]) )
-                    item.setAttribute( 'text', iis[3] )
+            try:
+                slines = zf_extractfile( zf, sfn ).split( "\n" )
+                for l in slines:
+                    l = chop(l)
+                    l = l.decode( 'gbk' )
+                    iis = l.split( '\t' )
+                    if len( iis ) >= 4 :
+                        item = doc.createElement( 'rc' )
+                        rc_root.appendChild( item )
+                        item.setAttribute( 'pos', iis[0] )
+                        item.setAttribute( 'sound', "%s"%(iis[1]) )
+                        #item.setAttribute( 'sound', "%smp3/%s.mp3"%(g_zf_path,iis[1]) )
+                        item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[2]) )
+                        item.setAttribute( 'text', iis[3] )
+            except:
+                _d( sfn )
         if rc_root.attribute( 'action' ) == 'k' :
             # 翻译练习.txt
             #print( u'翻译练习'.encode('gbk') )
@@ -1976,19 +1980,22 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
             #print( u'单词学习'.encode('gbk') )
             sfn = u"%s%s"%(path, u'单词学习cks.txt' )
             #print sfn
-            slines = zf_extractfile( zf, sfn ).split( "\n" )
-            for l in slines:
-                l = chop(l)
-                l = l.decode( 'gbk' )
-                #print l
-                iis = l.split( '\t' )
-                if len( iis ) >= 3 :
-                    item = doc.createElement( 'rc' )
-                    rc_root.appendChild( item )
-                    item.setAttribute( 'sound', iis[0] )
-                    #item.setAttribute( 'mov', iis[1] )
-                    item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[1]) )
-                    item.setAttribute( 'cn', iis[2] )
+            try:
+                slines = zf_extractfile( zf, sfn ).split( "\n" )
+                for l in slines:
+                    l = chop(l)
+                    l = l.decode( 'gbk' )
+                    #print l
+                    iis = l.split( '\t' )
+                    if len( iis ) >= 3 :
+                        item = doc.createElement( 'rc' )
+                        rc_root.appendChild( item )
+                        item.setAttribute( 'sound', iis[0] )
+                        #item.setAttribute( 'mov', iis[1] )
+                        item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[1]) )
+                        item.setAttribute( 'cn', iis[2] )
+            except:
+                _d( sfn )
         if rc_root.attribute( 'action' ) == 'm' :
             # 单词连连看.txt
             #print( u'单词连连看'.encode('gbk') )
@@ -2392,6 +2399,8 @@ def get_mp3_file( sn ):
         #print len( buf )
     else:
         fn = g_zf_path + "mp3/%s.mp3"%sn
+        fn = file_name_tran( fn )
+        _d( fn )
         buf = zf_extractfile( g_zf, fn )
     if( g_mp3_play != "" ):
         g_mp3_play_close()
@@ -3189,13 +3198,13 @@ if __name__ == '__main__':
     scene.addItem( g_qmlRoot )
 
     #cmd( "show", "menu/t.qml" )
-    #cmd( "show", "menu/main.qml" )
+    cmd( "show", "menu/main.qml" )
     #cmd( "show", "menu/dicts/main.qml" )
     #cmd( "dict", "新英汉" )
     #cmd( "show", "menu/primary_school/funs/encyclopedic/main.qml" )
     #cmd( "dir", "data/百科知识" )
     #cmd( "sound", ":study" )
-    cmd( "auto", "user/小学/电子课本/njyy3b10sx.p".decode('utf8') )
+    #cmd( "auto", "user/小学/电子课本/njyy3b10sx.p".decode('utf8') )
     #cmd( "auto", "user/小学/电子课本/xbzyy8s308.p".decode('utf8') )
 
     g_qmlRoot.cmd.connect( cmd )
