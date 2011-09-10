@@ -7,8 +7,10 @@ import QtQuick 1.0
          x:0;y:0
          width:100
          height:100
-         opacity: 0.1
+         opacity: 0.01
          color:"blue"
+         radius: 12
+         border.color: "Black"; border.width: 2
          //anchors.centerIn: parent
 
          //source: "images/big-sun.png"
@@ -31,7 +33,7 @@ import QtQuick 1.0
         SequentialAnimation on x {
             running:false
             id:animation1
-            loops:50
+            loops:0
             PropertyAnimation{
                 easing.type:Easing.InOutElastic; to:x+8; duration:10
             }
@@ -42,7 +44,7 @@ import QtQuick 1.0
         SequentialAnimation on y{
             id:animation2
             running:false
-            loops:50
+            loops:0
             PropertyAnimation{
                 easing.type:Easing.InOutBounce; to:y+8; duration:10
             }

@@ -17,6 +17,7 @@ Rectangle
     //property url qmlFile: 'tmp.qml'
     property url qmlFile: ''
     property string code: ""
+    property string page_no: ""
     property bool show: true
 
     Item{ id:embeddedViewer
@@ -40,6 +41,18 @@ Rectangle
                 if (event.key == 16777216 ) { 
                     //console.log( "----" )
                     cmd( "quit", "" ) 
+                }
+                if( event.key >= 48 && event.key <= 57 ){
+                    page_no += String.fromCharCode(event.key)
+                    console.log( page_no )
+                }
+                else if( event.key == 16777220 ){
+                    console.log( page_no )
+                    cmd( "text_book_go_page", page_no )
+                    page_no = ""
+                }
+                else{
+                    page_no = ""
                 }
             }
             onStatusChanged:{

@@ -116,7 +116,7 @@ Image {
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: 18
                 width: 60
-                text: "Quit"
+                text: "退出"
                 MouseArea {
                     anchors.fill: parent
                     //onClicked: Qt.quit()
@@ -128,7 +128,8 @@ Image {
                         //console.log( items.length )
                         var dir = items.join("/")
                         console.log( dir )
-                        doSelect( "dir", dir )
+                        //doSelect( "dir", dir )
+                        doSelect( "quit", "" )
                     }
                 }
                 Rectangle {

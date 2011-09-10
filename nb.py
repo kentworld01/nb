@@ -16,6 +16,8 @@ import time
 import random
 import pickle
 import pprint
+#import thread
+from threading import Thread
 #import deque
 from collections import deque
 
@@ -31,6 +33,14 @@ from PySide.QtXml import *
 from PySide.QtDeclarative import QDeclarativeView
 from PySide.QtDeclarative import QDeclarativeEngine
 from PySide.QtDeclarative import QDeclarativeComponent
+
+def show_welcome( a1, a2 ):
+    os.system( "show_pic.exe 15000" )
+
+g_thread = Thread( None, show_welcome, None, (1,1) )  
+g_thread.start()
+time.sleep( 2 )
+#g_thread.exit()
 
 import nb_qrc
 
@@ -364,30 +374,25 @@ Rectangle{
                 console.log( "hello" )
             }
         }
-
         //Cell{color:"black";x:300;y:100; cn:"q"}
         //Cell{color:"black";x:300;y:200; cn:"q"}
         //Cell{color:"red";x:100;y:100}
         //Cell{color:"yellow";x:100;y:200}
-
 """
 
 s_key_study_action_m_old3 = """
 import QtQuick 1.0
-
 /*
     This is exactly the same as states.qml, except that we have appended
     a set of transitions to apply animations when the item changes 
     between each state.
 */
-
 Rectangle {
     id: page
     width: 640; height: 480
     color: "#343434"
     property int nx:0
     property int ny:0
-
     Rectangle { 
         width:50
         height:50
@@ -408,7 +413,6 @@ Rectangle {
             }
         }
     }
-
     states: [
         State {
             name: "move"
@@ -427,7 +431,6 @@ Rectangle {
 s_key_study_action_m_old2 = """
 import QtQuick 1.0
 import "file:///D:/pro/net_study/net_bag/nb"
-
 Rectangle {
     id:window
     x:250
@@ -458,7 +461,6 @@ Rectangle {
         ListElement { ny:0; en:"test"; cn:""; name: "Easing.OutInCirc"; type: Easing.OutInCirc; ballColor: "SandyBrown" }
         ListElement { ny:0; en:"test"; cn:""; name: "Easing.InElastic"; type: Easing.InElastic; ballColor: "DarkGoldenRod" }
         ListElement { ny:0; en:"test"; cn:""; name: "Easing.OutElastic"; type: Easing.OutElastic; ballColor: "Chocolate" }
-
     }
     Component {
         id: delegate
@@ -658,15 +660,15 @@ Rectangle {
         //ListElement { name: "乐园"; cmd: "menu/plays/main.qml"}
     }
     DirView{ dir: 's_dir_html_view_temp_dir'; board_x:430; board_y:130; board_width:400; board_height:320; listItem: appModel }
+    ExitIcon{ x:960;y:580; cmd:path + "../main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
-
 """
 
 
 s_html_view_temp = """
 import QtQuick 1.0
 import QtWebKit 1.0
-
 Rectangle{
         width:1024
         height:768
@@ -687,10 +689,10 @@ Rectangle{
         anchors.centerIn: parent
 }
 """
+
 s_text_book_test = """
 import QtQuick 1.0
 import QtWebKit 1.0
-
 Rectangle{
         width:1024
         height:768
@@ -722,304 +724,465 @@ Rectangle{
         ShockIcon{ x:300;y:250;cmd_type:"text_book"; cmd: "key_study" }
         ShockIcon{ x:300;y:400;cmd_type:"text_book"; cmd: "study" }
     }
+    ExitIcon{ x:960;y:580; cmd:path + "../main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 """
 
 s_text_book_base = """
 import QtQuick 1.0
 import QtWebKit 1.0
-
 Rectangle{
-        id: page
-        property int mx : 0
-        property int my : 0
-        property int exercise_no : -1
-        property int exercise_try_count : 0
-        property string read_string : 's_text_book_read_string'
-        property string explain_string : 's_text_book_explain_string'
-        property string exercise_string : 's_text_book_exercise_string'
-        function doSelect( cmd_type, cmd_str ){
-            //console.log( "text book do Select" )
-            if( cmd_type == "quit" ){
+    id: page
+    property int mx : 0
+    property int my : 0
+    property int exercise_no : -1
+    property int exercise_try_count : 0
+    property string read_string : 's_text_book_read_string'
+    property string explain_string : 's_text_book_explain_string'
+    property string exercise_string : 's_text_book_exercise_string'
+    property int no_info_win : 0
+    function doSelect( cmd_type, cmd_str ){
+        //console.log( "text book do Select" )
+        if( cmd_type == "sys_quit" ){
+            page.exercise_no = -1
+            cmd( "sys_quit", "" )
+        }
+        else if( cmd_type == "quit" ){
+            page.exercise_no = -1
+            cmd( "quit", "" )
+        }
+        else if( cmd_type == "stop_sound"){
+            page.exercise_no = -1
+            cmd( "stop_sound", "" )
+        }
+        else if( cmd_type == "explain"){
+            cmd( "sound", explain_string )
+        }
+        else if( cmd_type == "read"){
+            page.exercise_no = -1
+            cmd( "sound", read_string )
+        }
+        else if( cmd_type == "exercise"){
+            //cmd( "sound", read_string )
+            info_win.y = -100
+            var lines = page.exercise_string.split( '|' )
+            var items = lines[0].split( '\t' )
+            console.log( page.exercise_string )
+            console.log( items[1] )
+            console.log( 0 )
+            cmd( "sound", items[1] )
+            page.exercise_no = 0
+        }
+        else{
+            if( cmd_type == "study" ){
                 page.exercise_no = -1
-                cmd( "quit", "" )
-            }
-            else if( cmd_type == "stop_sound"){
-                page.exercise_no = -1
-                cmd( "stop_sound", "" )
-            }
-            else if( cmd_type == "explain"){
-                cmd( "sound", explain_string )
-            }
-            else if( cmd_type == "read"){
-                page.exercise_no = -1
-                cmd( "sound", read_string )
-            }
-            else if( cmd_type == "exercise"){
-                //cmd( "sound", read_string )
-                info_win.y = -100
-                var lines = page.exercise_string.split( '|' )
-                var items = lines[0].split( '\t' )
-                console.log( page.exercise_string )
-                console.log( items[1] )
-                console.log( 0 )
-                cmd( "sound", items[1] )
-                page.exercise_no = 0
+                cmd( "sound", ":study" )
             }
             else{
-                if( cmd_type == "study" ){
-                    page.exercise_no = -1
-                    cmd( "sound", ":study" )
+                if( exercise_no >= 0 ){
                 }
                 else{
-                    if( exercise_no >= 0 ){
+                    page.exercise_no = -1
+                    var lines = cmd_str.split('|')
+                    var items = lines[0].split('\t')
+                    //console.log( items.length )
+                    if( items.length == 1 ){
+                        info_en.text = ""
+                        info_cn.text = ""
+                        cmd( "sound", items[0] )
                     }
-                    else{
-                        page.exercise_no = -1
-                        var lines = cmd_str.split('|')
-                        var items = lines[0].split('\t')
-                        //console.log( items.length )
-                        if( items.length == 1 ){
-                            info_en.text = ""
-                            info_cn.text = ""
-                            cmd( "sound", items[0] )
-                        }
-                        else if( items.length >= 4 ){
-                            info_en.text = items[0]
-                            info_cn.text = items[1]
-                            var sound_str = items[2] + "," + items[3]
-                            cmd( "switch_sound", sound_str )
-                            //cmd( "sound", sound_str )
-                        }
+                    else if( items.length >= 4 ){
+                        info_en.text = items[0]
+                        info_cn.text = items[1]
+                        var sound_str = items[2] + "," + items[3]
+                        cmd( "switch_sound", sound_str )
+                        //cmd( "sound", sound_str )
                     }
                 }
             }
         }
-        function doSelectPoint( x,y, mx, my, cmd_type, cmd_str ){
-            //console.log( "text book do Select point" )
-            // for debug value
-            my += 16
-            if( exercise_no >= 0 ){
-                doSelectPoint_exercise( x,y,mx,my,cmd_type, cmd_str )
-            }
-            else{
-                if( x + 400 > 1024 )    x = 1024 - 400
-                if( y + 100 > 768 )    y = 768 - 100
+    }
+    function doSelectPoint( x,y, mx, my, cmd_type, cmd_str ){
+        //console.log( "text book do Select point" )
+        // for debug value
+        my += 16
+        if( exercise_no >= 0 ){
+            doSelectPoint_exercise( x,y,mx,my,cmd_type, cmd_str )
+        }
+        else{
+            if( x + 400 > 1024 )    x = 1024 - 400
+            if( y + 100 > 768 )    y = 768 - 100
+            if( no_info_win == 0 ){
                 info_win.x = x
                 info_win.y = y
-                console.log( page.state )
-                if( page.state == "move" )
-                    page.state = ""
-                else 
-                    page.state = "move"
             }
+            console.log( page.state )
+            if( page.state == "move" )
+                page.state = ""
+            else 
+                page.state = "move"
         }
-        function doSelectPoint_exercise( x,y, mx, my, cmd_type, cmd_str ){
-            //console.log( "text book do Select point" )
-            // for debug value
-            my += 16
-            if( exercise_no >= 0 ){
-                var next_flag = 0
-                var lines = page.exercise_string.split( '|' )
-                var count = lines.length
-                var items = lines[page.exercise_no].split( '\t' )
-                console.log( items[0] )
-                var rect = items[0].split( ',' )
-                var l = parseInt( rect[0] ) * 1024 / 255
-                var t = parseInt( rect[1] ) * 768 / 255
-                var r = parseInt( rect[2] ) * 1024 / 255
-                var b = parseInt( rect[3] ) * 768 / 255
-                var str = " ( " + mx.toString() + " , " + my.toString() + " ) " + l.toString() + " , " + t.toString() + " , " + r.toString() + " , " + b.toString()
-                console.log( str )
-                if( l <= mx && mx <= r && t <= my && my <= b ){
-                    // find it
-                    console.log( "find it" )
-                    cmd( "sound", ":right" )
-                    next_flag = 1
-                }
-                else{
-                    console.log( "can not find it" )
-                    // error count
-                    page.exercise_try_count ++
-                    if( page.exercise_try_count <= 2 ){
-                        cmd( "sound", ":wrong" )
-                        cmd( "append_sound", items[1] )
-                    }
-                    if( page.exercise_try_count > 2 ){
-                        next_flag = 1
-                    }
-                }
-                if( next_flag == 1 ){
-                    page.exercise_no ++
-                    page.exercise_try_count = 0
-                    if( page.exercise_no < count ){
-                        items = lines[page.exercise_no].split( '\t' )
-                        cmd( "append_sound", items[1] )
-                        console.log( "add one" )
-                    }
-                    else{
-                        page.exercise_no = -1
-                        cmd( "append_sound", ":study" )
-                        console.log( "end " )
-                    }
-                }
+    }
+    function doSelectPoint_exercise( x,y, mx, my, cmd_type, cmd_str ){
+        //console.log( "text book do Select point" )
+        // for debug value
+        my += 16
+        if( exercise_no >= 0 ){
+            var next_flag = 0
+            var lines = page.exercise_string.split( '|' )
+            var count = lines.length
+            var items = lines[page.exercise_no].split( '\t' )
+            console.log( items[0] )
+            var rect = items[0].split( ',' )
+            var l = parseInt( rect[0] ) * 1024 / 255
+            var t = parseInt( rect[1] ) * 768 / 255
+            var r = parseInt( rect[2] ) * 1024 / 255
+            var b = parseInt( rect[3] ) * 768 / 255
+            var str = " ( " + mx.toString() + " , " + my.toString() + " ) " + l.toString() + " , " + t.toString() + " , " + r.toString() + " , " + b.toString()
+            console.log( str )
+            if( l <= mx && mx <= r && t <= my && my <= b ){
+                // find it
+                console.log( "find it" )
+                cmd( "sound", ":right" )
+                next_flag = 1
             }
             else{
+                console.log( "can not find it" )
+                // error count
+                page.exercise_try_count ++
+                if( page.exercise_try_count <= 2 ){
+                    cmd( "sound", ":wrong" )
+                    cmd( "append_sound", items[1] )
+                }
+                if( page.exercise_try_count > 2 ){
+                    next_flag = 1
+                }
+            }
+            if( next_flag == 1 ){
+                page.exercise_no ++
+                page.exercise_try_count = 0
+                if( page.exercise_no < count ){
+                    items = lines[page.exercise_no].split( '\t' )
+                    cmd( "append_sound", items[1] )
+                    console.log( "add one" )
+                }
+                else{
+                    page.exercise_no = -1
+                    cmd( "append_sound", ":study" )
+                    console.log( "end " )
+                }
             }
         }
-        width:1192
-        height:818
-        color:"red"
+        else{
+        }
+    }
+    width:1192
+    height:818
+    color:"red"
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: true
+        onClicked:{
+            info_win.x = 0
+            info_win.y = -100
+            console.log( "bg click" )
+            //console.log( mouse.x )
+            //console.log( mouse.y )
+            doSelectPoint_exercise( 0,0,mouse.x,mouse.y,"", "" )
+        }
+        onEntered: { page_command.state = "move" }
+    }
+    Image{
+        id: bg
+        x: -72
+        y: -46
+        source: "s_text_book_page_bg_file"
+        //source: "file:///D:/pro/net_study/net_bag/tmp/bg.jpg"
+        smooth: true 
+        //cache: false
+    }
+    /*
+    states : [
+        State { name: "move"; PropertyChanges { target: info_win; x: page.mx; y: page.my } }
+    ]
+    transitions: [
+        Transition { NumberAnimation { properties: "x,y"; easing.type: Easing.InOutQuad; duration: 1000 } }
+    ]
+    */
+    s_text_book_base_button_text
+    // all action in it study, explain, exercise, read
+    Image{
+        id: page_command
+        x: 0
+        y:0
+        source: "images/tb_page_command.png"
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
-            onClicked:{
-                info_win.x = 0
-                info_win.y = -100
-                console.log( "bg click" )
-                //console.log( mouse.x )
-                //console.log( mouse.y )
-                doSelectPoint_exercise( 0,0,mouse.x,mouse.y,"", "" )
+            onClicked: {
             }
-            onEntered: { page_command.state = "move" }
+            onEntered: { page_command.state = "" }
+            //onExited: { page_command.state = "move" }
         }
-        Image{
-            id: bg
-            x: -72
-            y: -46
-            source: "s_text_book_page_bg_file"
-            //source: "file:///D:/pro/net_study/net_bag/tmp/bg.jpg"
-            smooth: true 
-            //cache: false
-        }
-        Item{
-            id: info_win
-            x:-100
-            y:-100
-            width:400
-            height:100
-            Rectangle{
-                //x:100
-                //y:100
-                radius: 12
-                border.color: "Black"; border.width: 2
-                opacity: 0.6
-                color:"yellow"
-
-                anchors.fill: parent
-            }
-            Text{
-                id: info_en
-                x:10
-                y:10
-                color: "black"
-                font.pixelSize: 18
-                text:"Test text"
-            }
-            Text{
-                id: info_cn
-                x:10
-                y:40
-                color: "black"
-                font.pixelSize: 20
-                text:"Test text"
-            }
-        }
-        /*
         states : [
-            State { name: "move"; PropertyChanges { target: info_win; x: page.mx; y: page.my } }
+            State { name: "move"; PropertyChanges { target: page_command; x: -150 } }
         ]
         transitions: [
             Transition { NumberAnimation { properties: "x,y"; easing.type: Easing.InOutQuad; duration: 1000 } }
         ]
-        */
-        
-        s_text_book_base_button_text
-
-        // all action in it study, explain, exercise, read
+        SmallShockIcon{ x:20; y:55; cmd_type: "explain"; cmd : "" }
+        SmallShockIcon{ x:20; y:100; cmd_type: "study"; cmd : "" }
+        SmallShockIcon{ x:20; y:145; cmd_type: "read"; cmd : "" }
+        SmallShockIcon{ x:20; y:195; cmd_type: "exercise"; cmd : "" }
+        SmallShockIcon{ x:20; y:240; cmd_type: "quit"; cmd: "" }
+    }
+    Item{
+        x:0
+        y:700
+        width:48
+        height:48
+        Rectangle{
+            width:48
+            height:48
+            //anchors.fill: parent
+            opacity: 0.6
+            color:"yellow"
+            radius: 12
+            border.color: "Black"; border.width: 2
+        }
         Image{
-            id: page_command
-            x: 0
-            y:0
-            source: "images/tb_page_command.png"
+            x:8
+            y:8
+            //anchors.fill: parent
+            source: "images/go-previous-view.png"
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "prev page" )
+                bg.source= ""
+                cmd( "text_book_prev_page", "" )
+            }
+        }
+    }
+    Item{
+        x:1024-48
+        y:700
+        width:48
+        height:48
+        Rectangle{
+            width:48
+            height:48
+            //anchors.fill: parent
+            opacity: 0.6
+            color:"yellow"
+            radius: 12
+            border.color: "Black"; border.width: 2
+        }
+        Image{
+            x:8
+            y:8
+            //anchors.fill: parent
+            source: "images/go-next-view.png"
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "next page" )
+                bg.source= ""
+                cmd( "text_book_next_page", "" )
+            }
+        }
+    }
+    Item{
+        x:1024-48
+        y:650
+        width:48
+        height:48
+        Rectangle{
+            id: info_win_state
+            width:48
+            height:48
+            //anchors.fill: parent
+            opacity: 0.6
+            color:"yellow"
+            radius: 12
+            border.color: "Black"; border.width: 2
+        }
+        Image{
+            x:8
+            y:8
+            anchors.centerIn: parent
+            source: "images/edit-delete.png"
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "set info win state" )
+                console.log( no_info_win )
+                if( no_info_win == 0 ){
+                    console.log( "set red" )
+                    info_win_state.color = "red"
+                    no_info_win = 1
+                    info_win.y = -100
+                }
+                else{
+                    console.log( "set yellow" )
+                    info_win_state.color = "yellow"
+                    no_info_win = 0
+                }
+                //bg.source= ""
+                //cmd( "text_book_next_page", "" )
+            }
+        }
+    }
+    Rectangle{
+        id: info_win
+        x:-100
+        y:-100
+        width:400
+        height:150
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "info_win click" )
+            }
+        }
+        Rectangle{
+            //x:100
+            //y:100
+            radius: 12
+            border.color: "Black"; border.width: 2
+            //opacity: 0.6
+            color:"yellow"
+            anchors.fill: parent
+        }
+        /*
+        Text{
+            id: info_en
+            x:10
+            y:10
+            color: "black"
+            font.pixelSize: 18
+            text:"Test text"
+        }
+        */
+        TextEdit {
+            id: info_en
+            x:10
+            y:10
+            width: parent.width - 20
+            height: 50
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text: "Test text"
+            color: "black"
+            font.pixelSize: 20
+            readOnly: true
+            //onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+        }
+        /*
+        Text{
+            id: info_cn
+            x:10
+            y:40
+            color: "black"
+            font.pixelSize: 20
+            text:"Test text"
+        }
+        */
+        TextEdit {
+            id: info_cn
+            x:10
+            y:70
+            width: parent.width - 20
+            height: 50
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text: "Test text"
+            color: "black"
+            font.pixelSize: 20
+            readOnly: true
+            //onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+        }
+        Text{
+            x:330
+            y:10
+            text:"英汉"
             MouseArea{
                 anchors.fill: parent
-                hoverEnabled: true
+                onClicked:{
+                    console.log( "ec" )
+                    cmd( "dict", "新英汉 " + info_en.text )
+                }
+            }
+        }
+        Image{
+            x:370
+            y:10
+            source: "images/edit-delete.png"
+            MouseArea{
+                anchors.fill: parent
                 onClicked: {
-                }
-                onEntered: { page_command.state = "" }
-                //onExited: { page_command.state = "move" }
-            }
-            states : [
-                State { name: "move"; PropertyChanges { target: page_command; x: -150 } }
-            ]
-            transitions: [
-                Transition { NumberAnimation { properties: "x,y"; easing.type: Easing.InOutQuad; duration: 1000 } }
-            ]
-            SmallShockIcon{ x:20; y:55; cmd_type: "explain"; cmd : "" }
-            SmallShockIcon{ x:20; y:100; cmd_type: "study"; cmd : "" }
-            SmallShockIcon{ x:20; y:145; cmd_type: "read"; cmd : "" }
-            SmallShockIcon{ x:20; y:195; cmd_type: "exercise"; cmd : "" }
-            SmallShockIcon{ x:20; y:240; cmd_type: "quit"; cmd: "" }
-        }
-        Item{
-            x:0
-            y:700
-            width:48
-            height:48
-            Rectangle{
-                width:48
-                height:48
-                //anchors.fill: parent
-                opacity: 0.6
-                color:"yellow"
-                radius: 12
-                border.color: "Black"; border.width: 2
-            }
-            Image{
-                x:8
-                y:8
-                //anchors.fill: parent
-                source: "images/go-previous-view.png"
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked:{
-                    console.log( "prev page" )
-                    bg.source= ""
-                    cmd( "text_book_prev_page", "" )
+                    console.log( "close info win" )
+                    page.state = ""
+                    info_win.x = 0
+                    info_win.y = -100
                 }
             }
         }
-        Item{
-            x:1024-48
-            y:700
-            width:48
-            height:48
-            Rectangle{
-                width:48
-                height:48
-                //anchors.fill: parent
-                opacity: 0.6
-                color:"yellow"
-                radius: 12
-                border.color: "Black"; border.width: 2
-            }
-            Image{
-                x:8
-                y:8
-                //anchors.fill: parent
-                source: "images/go-next-view.png"
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked:{
-                    console.log( "next page" )
-                    bg.source= ""
-                    cmd( "text_book_next_page", "" )
-                }
-            }
+    }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
+}
+"""
+
+
+
+s_qml_password = """
+import QtQuick 1.0
+Rectangle {
+    id:dict_page
+    width: 1024
+    height: 768
+    color: "black"
+    Image{
+        anchors.fill: parent
+        //anchors.centerIn: parent
+        source: "images/password_bg.jpg"
+    }
+    TextInput{
+        id: input
+        x: 350
+        y: 350
+        width: parent.width - 12
+        //anchors.centerIn: parent
+        maximumLength:21
+        font.pixelSize: 48;
+        font.bold: true
+        color: "red"; 
+        selectionColor: "mediumseagreen"
+        focus: true
+        //acceptableInput: true
+        onAccepted:{
+            doSelect( "sys_exit", "" )
+            //var val = dict_value.dict("no", input.text )
+            //var tv = parseInt( val )
+            //console.log( tv )
+            //list.positionViewAtIndex ( tv, ListView.Beginning )
+            //user_input( input.text );
+
+            //var val = ""
+            //val = dict_value.dict("sound", input.text )
+            //sound.text = val
+            //val = dict_value.dict("content", input.text )
+            //content.text = val
+            container.accepted()
         }
+        text: "请输入退出密码"
+        selectByMouse: true
+    }
 }
 """
 
@@ -1028,28 +1191,30 @@ Rectangle{
 s_qml_dict_string = """
 import QtQuick 1.0
 Rectangle {
-    id:r
+    id:dict_page
     width: 1024
     height: 768
     color: "white"
-
-
-
-
-
+    function user_input( input_text ){
+        var val = ""
+        val = dict_value.dict("sound", input_text )
+        sound.text = val
+        val = dict_value.dict("content", input_text )
+        content.text = val
+    }
     ListModel {
         id: appModel
         s_qml_dict_word_list
         //ListElement { name: "乐"; }
     }
-    DictView{ dir: 's_dir_html_view_temp_dir'; board_x:670; board_y:170; board_width:200; board_height:280; listItem: appModel }
+    DictView{  currentIndex: s_qml_dict_string_list_no; dir: 's_dir_html_view_temp_dir'; board_x:670; board_y:170; board_width:200; board_height:280; listItem: appModel }
     Text{
         id:word
         x: 80
         y:140
         width:100
         height:100
-        text: ""
+        text: "s_qml_dict_string_word"
         color: "blue"
         font.pixelSize: 24
         MouseArea{
@@ -1069,7 +1234,7 @@ Rectangle {
         y:550
         width:100
         height:100
-        text: ""
+        text: "s_qml_dict_string_sound"
         color: "blue"
         font.pixelSize: 24
     }
@@ -1094,33 +1259,27 @@ Rectangle {
     }
     }
     */
-    
-
-
         Flickable {
             id: flick
             x: 80
             y:207
             width:280
             height:200
-
             //anchors.fill: parent
             contentWidth: content.paintedWidth
             contentHeight: content.paintedHeight
             interactive: true
             clip: true
-
-            function ensureVisible(r) {
-                if (contentX >= r.x)
-                    contentX = r.x;
-                else if (contentX+width <= r.x+r.width)
-                    contentX = r.x+r.width-width;
-                if (contentY >= r.y)
-                    contentY = r.y;
-                else if (contentY+height <= r.y+r.height)
-                    contentY = r.y+r.height-height;
+            function ensureVisible(dict_page) {
+                if (contentX >= dict_page.x)
+                    contentX = dict_page.x;
+                else if (contentX+width <= dict_page.x+dict_page.width)
+                    contentX = dict_page.x+dict_page.width-width;
+                if (contentY >= dict_page.y)
+                    contentY = dict_page.y;
+                else if (contentY+height <= dict_page.y+dict_page.height)
+                    contentY = dict_page.y+dict_page.height-height;
             }
-
             TextEdit {
                 id: content
                 width: flick.width
@@ -1128,19 +1287,15 @@ Rectangle {
                 focus: true
                 wrapMode: TextEdit.Wrap
                 //wrapMode: TextEdit.WordWrap
-                text: ""
+                text: "s_qml_dict_string_content"
                 color: "blue"
                 font.pixelSize: 29
                 readOnly: true
-
                 onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
-
             }
         }
-
-
-
-    
+    ExitIcon{ x:960;y:580; cmd:path + "../main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 """
 
@@ -1598,6 +1753,13 @@ Rectangle {
 
 
 
+def password_for_sys_exit():
+    qml_str = s_qml_password.decode( 'utf8' )
+    if( qml_str != '' ):
+        g_qmlRoot.setProperty( "qmlFile", "" )
+        g_qmlRoot.setProperty( "code", qml_str )
+        g_qmlRoot.setProperty( "qmlFile", "tmp.qml" )
+
 def sys_exit():
     try:
         shutil.rmtree( "tmp" )
@@ -1768,7 +1930,7 @@ def os_listdir( dir ):
                             if len(tis)==1 :
                                 ls.append( file_name_tran(iis[0]) )
                             elif len(tis)>=2 :
-                                if iis[0].endswith( 'mp3' ) or iis[0].endswith( 'gif' ) or iis[0].endswith('jpg') or iis[0].endswith('png')  :
+                                if iis[0].endswith( 'mp3' ) or iis[0].endswith( 'gif' ) or iis[0].endswith('jpg') or iis[0].endswith('bat')or iis[0].endswith('txt')or iis[0].endswith('png')  :
                                     print "not show %s"%iis[0]
                                 else:
                                     ls.append( file_name_tran(iis[0]) )
@@ -2223,6 +2385,10 @@ def create_xml_file_from_zip_file( zf ):
     #print doc.toString()
     return doc
 
+def sys_save_tmp_file( str, fn ):
+        f = open( fn, 'w' )
+        f.write( str.encode('utf8') )
+        f.close()
 
 def get_text_book_data_from_zip_file_debug():
     global g_text_book_data
@@ -2785,7 +2951,7 @@ def get_text_book_string_key_study( str ):
 def get_text_book_string_study( str ):
     global g_text_book_now_page
     global g_rand_value
-    text_book_base = s_text_book_base
+    text_book_base = s_text_book_base.decode('utf8')
     text_book_base = text_book_base.replace( "s_text_book_read_string", get_text_book_study_page_read_data( g_text_book_now_page ) )
     text_book_base = text_book_base.replace( "s_text_book_explain_string", get_text_book_study_page_explain_data( g_text_book_now_page ) )
     text_book_base = text_book_base.replace( "s_text_book_exercise_string", get_text_book_study_page_exercise_data( g_text_book_now_page ) )
@@ -2807,6 +2973,8 @@ def get_text_book_string_study( str ):
     #print code
     str = text_book_base.replace( "s_text_book_base_button_text", code )
     #print str
+    cmd( "set_quit", "text_book main" )
+    sys_save_tmp_file( str, "dot_reader.qml" )
     return str 
 
 def get_text_book_string( str ):
@@ -2853,8 +3021,16 @@ def get_g_dict_data( str ):
 
 def get_qml_dict_string( str ):
     global g_dict
+    word = ''
+    sound = ''
+    content = ''
+    list_no = '0'
     str = str.encode('utf8')
-    get_g_dict_data( str )
+    iis = str.split( ' ' )
+    get_g_dict_data( iis[0] )
+    if len(iis) >= 2 :
+        word = iis[1]
+        _d( word )
 
     qml_str = s_qml_dict_string
     item = """ListElement{name:"%s"}\n"""
@@ -2864,6 +3040,17 @@ def get_qml_dict_string( str ):
     for k in key_list:
         tstr += item % k.encode('utf8')
     qml_str = qml_str.replace( "s_qml_dict_word_list", tstr )
+    if word != '' :
+        dict_value = DictValue()
+        sound = dict_value.dict("sound", word )
+        sound = sound.encode( 'utf8' )
+        content = dict_value.dict("content", word )
+        content = content.encode( 'utf8' )
+        list_no = dict_value.dict( 'no', word )
+    qml_str = qml_str.replace( "s_qml_dict_string_word", word )
+    qml_str = qml_str.replace( "s_qml_dict_string_sound", sound )
+    qml_str = qml_str.replace( "s_qml_dict_string_content", content )
+    qml_str = qml_str.replace( "s_qml_dict_string_list_no", list_no )
     return qml_str.decode('utf8')
 
 def package_file_deal( str ):
@@ -2904,6 +3091,7 @@ def get_qml( type_str, str ):
     global g_quit_command
     #print "type_str=%s,str=%s."%(type_str,str)
 
+    qml_str = ""
     g_mp3_play_list.clear()
     g_mp3_play_close()
     #g_mp3_play_list.append( ":info" )
@@ -2919,6 +3107,7 @@ def get_qml( type_str, str ):
             type_str = "dir"
         elif str.endswith("swf") :
             system_cmd = "flash.exe \"%s%s\""%( "", str )
+            _d( system_cmd )
             os.system( system_cmd.encode('gbk') )
             type_str = "up_dir"
         elif str.endswith( "htm" ):
@@ -2944,11 +3133,28 @@ def get_qml( type_str, str ):
             type_str = "dir"
 
 
+    if type_str == "sys_quit":
+        print "cmd sys_quit"
+        password_for_sys_exit()
+        return ""
+        #type_str = "show"
+        #str = "menu/main.qml"
+
+    if type_str == "sys_exit":
+        print "cmd sys_exit"
+        sys_exit()
+
     if( type_str == "quit" ):
         #_d( len(g_qml_lastest_string_list) )
         if g_quit_command[:6] == "up_dir":
             type_str = 'up_dir'
             str = g_quit_command[7:]
+            _d( str )
+            g_quit_command = 'quit'
+        elif g_quit_command[:9] == "text_book":
+            type_str = 'text_book'
+            _d( type_str )
+            str = g_quit_command[10:]
             _d( str )
             g_quit_command = 'quit'
         elif g_quit_command == "quit":
@@ -2983,7 +3189,21 @@ def get_qml( type_str, str ):
             type_str = "dir"
 
 
+    if type_str == "text_book_go_page":
+        _d( g_qml_str_lastest_type[ :9 ] )
+        if( g_qml_str_lastest_type[ :9 ] == 'text_book' ):
+            no = int( str )
+            _d( no )
+            book = g_text_book_data.elementsByTagName('book').at(0).toElement()
+            page_count = book.childNodes().count()
+            if( 0 < no and no < page_count ):
+                g_text_book_now_page = no
+            str = "study"
+            qml_str = get_text_book_string( str )
+            return qml_str
+
     g_qml_str_lastest_type = type_str
+
     if( type_str == "show" ):
         #print "append %s"%str 
         g_qml_lastest_string_list.append( str )
@@ -3007,8 +3227,6 @@ def get_qml( type_str, str ):
         page_count = book.childNodes().count()
         if( g_text_book_now_page < page_count ):
             g_text_book_now_page += 1
-        #print "g_text_book_now_page = %d"% g_text_book_now_page
-        #print "g_text_book_now_page = %d"%g_text_book_now_page
         str = "study"
         qml_str = get_text_book_string( str )
     elif type_str == "dict":
@@ -3016,6 +3234,62 @@ def get_qml( type_str, str ):
     else:
         qml_str = ""
     return qml_str
+
+def dot_reader_special_command( str ):
+    str = str.split( ',' )[0]
+    type = "auto"
+    _d( str )
+    char = str[2:3]
+    _d( char )
+    str = str.encode( 'utf8' )
+    _d( str )
+    _d( "三字经" )
+    if str == ":三字经":
+        str = "data/三字经"
+    elif str == ":千字文":
+        str = "data/千字文"
+    elif str == ":百家姓":
+        str = "data/百家姓"
+    elif str == ":弟子规":
+        str = "data/弟子规"
+    elif str == ":学习工具":
+        str = "menu\primary_school\study_tools\main.qml"
+    elif str == ":益智游戏":
+        str = "data/游戏"
+    elif str == ":点读课本":
+        type = "dir"
+        str = "user/小学/电子课本"
+    elif str == ":视频教学":
+        type = "dir"
+        str = "user/小学/动漫教学"
+    elif str == ":同步课堂":
+        type = "dir"
+        str = "user/小学/电子课本"
+    elif str == ":词典":
+        str = "menu/dicts/main.qml"
+    elif str == ":音量加":
+        return ""
+    elif str == ":音量减":
+        return ""
+    elif char[0] >= 'a' and char[0] <= 'z' :
+        _d( char )
+        fn = "data/动漫课堂/字母/%s.swf"%( char.encode('utf8') )
+        fn = fn.decode('utf8')
+        #get_qml( "auto", fn )
+        str = package_file_deal( fn )
+        if str.endswith("swf") :
+            system_cmd = "flash.exe \"%s%s\""%( "", str )
+            os.system( system_cmd.encode('gbk') )
+        return ''
+    _d( type )
+    _d( str )
+    if str[:1] != ':' :
+        qml_str = get_qml( type, str )
+        if( qml_str != '' ):
+            g_qmlRoot.setProperty( "qmlFile", "" )
+            g_qmlRoot.setProperty( "code", qml_str )
+            g_qmlRoot.setProperty( "qmlFile", "tmp.qml" )
+    return ""
 
 def cmd( type, str ):
     global g_view
@@ -3026,6 +3300,8 @@ def cmd( type, str ):
     global g_quit_command
     #print "type = %s"%type
     #print "str = %s"%str
+    _d( type )
+    _d( str )
     str = str.replace( "\\", "/" )
     if type == "text_book_show_pos" :
         print str
@@ -3040,6 +3316,16 @@ def cmd( type, str ):
             g_mp3_play_list.append( ii )
         g_mp3_play_close()
         g_mp3_play_start()
+    elif type == "sound_flash":
+        _d( str )
+        g_mp3_play_list.clear()
+        iis = str.split(',')
+        _d( iis[0] )
+        g_mp3_play_list.append( iis[0] )
+        g_mp3_play_close()
+        g_mp3_play_start()
+        dot_reader_special_command( str )
+
     elif type == "switch_sound":
         g_mp3_play_list.clear()
         iis = str.split(',')
@@ -3066,10 +3352,11 @@ def cmd( type, str ):
         g_mp3_play_close()
         g_mp3_play_list.clear()
     else:
-        g_qmlRoot.setProperty( "qmlFile", "" )
         qml_str = get_qml( type, str )
-        g_qmlRoot.setProperty( "code", qml_str )
-        g_qmlRoot.setProperty( "qmlFile", "tmp.qml" )
+        if( qml_str != '' ):
+            g_qmlRoot.setProperty( "qmlFile", "" )
+            g_qmlRoot.setProperty( "code", qml_str )
+            g_qmlRoot.setProperty( "qmlFile", "tmp.qml" )
 
 def g_mp3_play_wait():
     global g_mp3_play
@@ -3118,6 +3405,13 @@ def timerProcess():
 
 
 
+def no_being_end_space( word ):
+    while word[:1] == ' ':
+        word = word[1:]
+    while word[-1:] == ' ':
+        word = word[:-1]
+    _d( word )
+    return word
 class DictValue(QtCore.QObject):
     def __init__(self):
         super(DictValue,self).__init__()
@@ -3130,6 +3424,14 @@ class DictValue(QtCore.QObject):
         #print type
         #print word
         #return "abcdef"
+        word = no_being_end_space( word )
+        try:
+            if g_dict[ word ] == '' :
+                return '' 
+        except:
+            _d( word )
+            return '' 
+
         if type == "word":
             return word
         elif type == "sound":
@@ -3217,10 +3519,27 @@ if __name__ == '__main__':
     timer.start(500);
 
 
-    #g_qmlRoot.setProperty( "x", x )
-    #g_qmlRoot.setProperty( "y", y )
-    #g_view.showFullScreen()
-    g_view.show()
+
+    buf = get_qml_file_data_by_qt( "images/bird.png" )
+    cursor = QPixmap()
+    cursor.loadFromData( buf, "PNG" )
+    app.setOverrideCursor(QCursor(cursor, 0, 0))
+    #nullCursor = QPixmap( "images/bird.png" );
+    #nullCursor = QPixmap(48, 48);
+    #nullCursor.load( "images/bird.png" )
+    #nullCursor.fill(QtCore.transparent)
+    #app.setOverrideCursor(QCursor(QtCore.Qt.CrossCursor))
+    #app.setOverrideCursor(QCursor(nullCursor))
+
+
+
+
+    if 0:
+        g_qmlRoot.setProperty( "x", x )
+        g_qmlRoot.setProperty( "y", y )
+        g_view.showFullScreen()
+    else:
+        g_view.show()
 
     app.exec_()
 

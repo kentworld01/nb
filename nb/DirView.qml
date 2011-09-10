@@ -22,6 +22,12 @@ Rectangle {
         id: icon_list_bg
         source: bg
         anchors.centerIn: parent 
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "iconlist click" )
+            }
+        }
 
         Button {
             id:up_button

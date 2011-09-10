@@ -73,6 +73,7 @@ Flickable {
         transformOrigin: Item.TopLeft
         settings.javascriptEnabled: true
         settings.pluginsEnabled: true
+        settings.printElementBackgrounds: true
 
         function fixUrl(url)
         {

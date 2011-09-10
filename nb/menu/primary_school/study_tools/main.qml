@@ -20,5 +20,6 @@ Rectangle {
     }
     IconList{ board_x:200; board_y:100; board_width:600; board_height:500; bg: "menu/primary_school/study_tools/bg.jpg"; listItem: appModel }
     ExitIcon{ x:900;y:530; cmd:"menu/primary_school/main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 

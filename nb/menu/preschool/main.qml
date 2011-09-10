@@ -13,6 +13,7 @@ Image {
          ShockIcon{ x:790;y:220; cmd:"menu/none.qml" }
          ShockIcon{ x:400;y:500; cmd:"menu/none.qml" }
          ExitIcon{ x:900;y:530; cmd:"menu/main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 
 

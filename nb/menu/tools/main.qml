@@ -12,6 +12,7 @@ Image {
          ShockIcon{ x:430;y:200; cmd:"menu/none.qml" }
          ShockIcon{ x:520;y:280; cmd:path + "curriculum/main.qml" }
          ExitIcon{ x:930;y:600; cmd:path + "../main.qml" }
+         QuitIcon{ x:960;y:10; cmd:"menu/main.qml" }
 }
 
 

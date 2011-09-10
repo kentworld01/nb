@@ -1,7 +1,7 @@
 import QtQuick 1.0
 Rectangle{
          property string cmd
-         property string cmd_type: "show"
+         property string cmd_type:"show"
          id: shockIcon
          x:0;y:0
          MouseArea{
@@ -13,19 +13,20 @@ Rectangle{
 
          Image {
              id: icon
-             source: "images/big-sun.png"
+             source: "images/Close.png"
              MouseArea{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    doSelect( cmd_type, cmd )
+                    //doSelect( cmd_type, cmd )
+                    doSelect( "sys_quit", "" )
                 }
                 onEntered: {
-                    icon.source= "images/big-face-smile.png"
+                    icon.source= "images/Close.png"
                     animation1.running = true;
                     animation2.running = true;
                 }
-                onExited: icon.source= "images/big-sun.png"
+                onExited: icon.source= "images/Close.png"
             }
             SequentialAnimation on x {
                 running:false

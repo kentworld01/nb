@@ -2,7 +2,6 @@
     <qresource prefix="/">
 		<file>nb\Button.qml</file>
 		<file>nb\Cell.qml</file>
-		<file>nb\Cell1.qml</file>
 		<file>nb\DictView.qml</file>
 		<file>nb\DirHtmlView.qml</file>
 		<file>nb\DirList.qml</file>
@@ -12,6 +11,7 @@
 		<file>nb\Header.qml</file>
 		<file>nb\IconList.qml</file>
 		<file>nb\qs.qml</file>
+		<file>nb\QuitIcon.qml</file>
 		<file>nb\ScrollBar.qml</file>
 		<file>nb\ShockIcon.qml</file>
 		<file>nb\ShockRect.qml</file>
@@ -23,7 +23,12 @@
 		<file>nb\WebBrowser.qml</file>
 		<file>nb\images\big-face-smile.png</file>
 		<file>nb\images\big-sun.png</file>
+		<file>nb\images\bird.bmp</file>
+		<file>nb\images\bird.gif</file>
+		<file>nb\images\bird.jpg</file>
+		<file>nb\images\bird.png</file>
 		<file>nb\images\Butterfly.jpg</file>
+		<file>nb\images\Close.png</file>
 		<file>nb\images\dict_bg.jpg</file>
 		<file>nb\images\display.png</file>
 		<file>nb\images\edit-delete.png</file>
@@ -38,6 +43,7 @@
 		<file>nb\images\list_bg_old.jpg</file>
 		<file>nb\images\null.png</file>
 		<file>nb\images\o.png</file>
+		<file>nb\images\password_bg.jpg</file>
 		<file>nb\images\plus-sign.png</file>
 		<file>nb\images\scrollbar.png</file>
 		<file>nb\images\sun.png</file>
@@ -47,6 +53,79 @@
 		<file>nb\images\titlebar-bg.png</file>
 		<file>nb\images\view-refresh.png</file>
 		<file>nb\images\x.png</file>
+		<file>nb\images\中学主界面.jpg</file>
+		<file>nb\images\学习机1.jpg</file>
+		<file>nb\images\欢迎.jpg</file>
+		<file>nb\images\工具箱\Thumbs.db</file>
+		<file>nb\images\工具箱\仿真实验.png</file>
+		<file>nb\images\工具箱\史地生政.png</file>
+		<file>nb\images\工具箱\数理化.png</file>
+		<file>nb\images\工具箱\英语.png</file>
+		<file>nb\images\工具箱\词典.png</file>
+		<file>nb\images\工具箱\语文.png</file>
+		<file>nb\images\工具箱-史地生政\Thumbs.db</file>
+		<file>nb\images\工具箱-史地生政\习题全解.png</file>
+		<file>nb\images\工具箱-史地生政\历史今天.png</file>
+		<file>nb\images\工具箱-史地生政\趣味百科.png</file>
+		<file>nb\images\工具箱-数理化\Thumbs.db</file>
+		<file>nb\images\工具箱-数理化\习题全解.png</file>
+		<file>nb\images\工具箱-数理化\元素周期表.png</file>
+		<file>nb\images\工具箱-数理化\公式学习.png</file>
+		<file>nb\images\工具箱-数理化\单位换算.png</file>
+		<file>nb\images\工具箱-数理化\科学计算.png</file>
+		<file>nb\images\工具箱-数理化\计算器.png</file>
+		<file>nb\images\工具箱-英语\Thumbs.db</file>
+		<file>nb\images\工具箱-英语\三步互动.png</file>
+		<file>nb\images\工具箱-英语\中学语法.png</file>
+		<file>nb\images\工具箱-英语\习题全解.png</file>
+		<file>nb\images\工具箱-英语\动词变化.png</file>
+		<file>nb\images\工具箱-英语\单词听写.png</file>
+		<file>nb\images\工具箱-英语\国际音标.png</file>
+		<file>nb\images\工具箱-英语\幽默英语.png</file>
+		<file>nb\images\工具箱-英语\情景会话.png</file>
+		<file>nb\images\工具箱-英语\模拟考场.png</file>
+		<file>nb\images\工具箱-英语\英语写作.png</file>
+		<file>nb\images\工具箱-英语\英语考试简介.png</file>
+		<file>nb\images\工具箱-英语\英语谚语.png</file>
+		<file>nb\images\工具箱-词典\Thumbs.db</file>
+		<file>nb\images\工具箱-词典\动漫词典.png</file>
+		<file>nb\images\工具箱-词典\古代汉语.png</file>
+		<file>nb\images\工具箱-词典\成语词典.png</file>
+		<file>nb\images\工具箱-词典\描红词典.png</file>
+		<file>nb\images\工具箱-词典\新英汉.png</file>
+		<file>nb\images\工具箱-词典\汉英词典.png</file>
+		<file>nb\images\工具箱-词典\现代汉语.png</file>
+		<file>nb\images\工具箱-词典\英汉有声.png</file>
+		<file>nb\images\工具箱-语文\Thumbs.db</file>
+		<file>nb\images\工具箱-语文\三字经.png</file>
+		<file>nb\images\工具箱-语文\作文.png</file>
+		<file>nb\images\工具箱-语文\千字文.png</file>
+		<file>nb\images\工具箱-语文\古文观止.png</file>
+		<file>nb\images\工具箱-语文\弟子规.png</file>
+		<file>nb\images\工具箱-语文\成语典故.png</file>
+		<file>nb\images\工具箱-语文\百家姓.png</file>
+		<file>nb\images\工具箱-语文\论语.png</file>
+		<file>nb\images\工具箱-语文\诗歌欣赏.png</file>
+		<file>nb\images\开心一刻\Thumbs.db</file>
+		<file>nb\images\开心一刻\动漫.png</file>
+		<file>nb\images\开心一刻\博客.png</file>
+		<file>nb\images\开心一刻\游戏.png</file>
+		<file>nb\images\开心一刻\电子书.png</file>
+		<file>nb\images\开心一刻\电影.png</file>
+		<file>nb\images\开心一刻\相册.png</file>
+		<file>nb\images\开心一刻\音乐.png</file>
+		<file>nb\images\首页\Thumbs.db</file>
+		<file>nb\images\首页\化学.png</file>
+		<file>nb\images\首页\历史.png</file>
+		<file>nb\images\首页\地理.png</file>
+		<file>nb\images\首页\工具箱.png</file>
+		<file>nb\images\首页\开心一刻.png</file>
+		<file>nb\images\首页\政治.png</file>
+		<file>nb\images\首页\数学.png</file>
+		<file>nb\images\首页\物理.png</file>
+		<file>nb\images\首页\生物.png</file>
+		<file>nb\images\首页\英语.png</file>
+		<file>nb\images\首页\语文.png</file>
 		<file>nb\menu\app.png</file>
 		<file>nb\menu\bg.jpg</file>
 		<file>nb\menu\main.qml</file>
@@ -82,6 +161,8 @@
 		<file>nb\menu\preschool\bg.jpg</file>
 		<file>nb\menu\preschool\main.qml</file>
 		<file>nb\menu\primary_school\bg.jpg</file>
+		<file>nb\menu\primary_school\dot_reader.qml</file>
+		<file>nb\menu\primary_school\dot_reader.qml.bak</file>
 		<file>nb\menu\primary_school\main.qml</file>
 		<file>nb\menu\primary_school\funs\app.png</file>
 		<file>nb\menu\primary_school\funs\bg.jpg</file>
@@ -112,28 +193,116 @@
 		<file>nb\menu\tools\curriculum\main.qml</file>
 		<file>nb\menu\tools\system\bg.jpg</file>
 		<file>nb\menu\tools\system\main.qml</file>
+		<file>nb\mp3\0.mp3</file>
+		<file>nb\mp3\1.mp3</file>
+		<file>nb\mp3\2.mp3</file>
+		<file>nb\mp3\3.mp3</file>
+		<file>nb\mp3\4.mp3</file>
+		<file>nb\mp3\5.mp3</file>
+		<file>nb\mp3\6.mp3</file>
+		<file>nb\mp3\7.mp3</file>
+		<file>nb\mp3\8.mp3</file>
+		<file>nb\mp3\9.mp3</file>
+		<file>nb\mp3\a0001.mp3</file>
+		<file>nb\mp3\a0002.mp3</file>
+		<file>nb\mp3\a0003.mp3</file>
+		<file>nb\mp3\a0004.mp3</file>
+		<file>nb\mp3\a0005.mp3</file>
+		<file>nb\mp3\a0006.mp3</file>
+		<file>nb\mp3\a0007.mp3</file>
+		<file>nb\mp3\a0008.mp3</file>
+		<file>nb\mp3\a0009.mp3</file>
+		<file>nb\mp3\a0010.mp3</file>
+		<file>nb\mp3\a0011.mp3</file>
+		<file>nb\mp3\a0012.mp3</file>
+		<file>nb\mp3\a0013.mp3</file>
+		<file>nb\mp3\a0014.mp3</file>
+		<file>nb\mp3\a0015.mp3</file>
+		<file>nb\mp3\a0016.mp3</file>
+		<file>nb\mp3\a0017.mp3</file>
+		<file>nb\mp3\a0018.mp3</file>
+		<file>nb\mp3\a0019.mp3</file>
+		<file>nb\mp3\a0020.mp3</file>
+		<file>nb\mp3\a0021.mp3</file>
+		<file>nb\mp3\a0022.mp3</file>
+		<file>nb\mp3\a0023.mp3</file>
+		<file>nb\mp3\a0024.mp3</file>
+		<file>nb\mp3\a0025.mp3</file>
+		<file>nb\mp3\a0026.mp3</file>
+		<file>nb\mp3\a0027.mp3</file>
+		<file>nb\mp3\a0028.mp3</file>
+		<file>nb\mp3\a0029.mp3</file>
+		<file>nb\mp3\a0030.mp3</file>
+		<file>nb\mp3\a0031.mp3</file>
+		<file>nb\mp3\a0032.mp3</file>
+		<file>nb\mp3\a0033.mp3</file>
+		<file>nb\mp3\a0034.mp3</file>
+		<file>nb\mp3\a0035.mp3</file>
+		<file>nb\mp3\a0036.mp3</file>
+		<file>nb\mp3\a0037.mp3</file>
+		<file>nb\mp3\a0038.mp3</file>
+		<file>nb\mp3\a0039.mp3</file>
+		<file>nb\mp3\a0040.mp3</file>
+		<file>nb\mp3\a0041.mp3</file>
+		<file>nb\mp3\a0042.mp3</file>
+		<file>nb\mp3\a0043.mp3</file>
+		<file>nb\mp3\a0044.mp3</file>
+		<file>nb\mp3\a0045.mp3</file>
+		<file>nb\mp3\a0046.mp3</file>
+		<file>nb\mp3\a0047.mp3</file>
+		<file>nb\mp3\a0048.mp3</file>
+		<file>nb\mp3\Aa.mp3</file>
 		<file>nb\mp3\answer_right.mp3</file>
 		<file>nb\mp3\answer_wrong.mp3</file>
+		<file>nb\mp3\Bb.mp3</file>
+		<file>nb\mp3\Cc.mp3</file>
+		<file>nb\mp3\Dd.mp3</file>
 		<file>nb\mp3\du.mp3</file>
+		<file>nb\mp3\Ee.mp3</file>
+		<file>nb\mp3\Ff.mp3</file>
+		<file>nb\mp3\Gg.mp3</file>
+		<file>nb\mp3\Hh.mp3</file>
+		<file>nb\mp3\Ii.mp3</file>
 		<file>nb\mp3\info.mp3</file>
+		<file>nb\mp3\Jj.mp3</file>
+		<file>nb\mp3\Kk.mp3</file>
+		<file>nb\mp3\Ll.mp3</file>
+		<file>nb\mp3\Mm.mp3</file>
+		<file>nb\mp3\Nn.mp3</file>
+		<file>nb\mp3\Oo.mp3</file>
+		<file>nb\mp3\Pp.mp3</file>
+		<file>nb\mp3\Qq.mp3</file>
 		<file>nb\mp3\qq001.mp3</file>
 		<file>nb\mp3\qq0011.mp3</file>
 		<file>nb\mp3\qq002.mp3</file>
 		<file>nb\mp3\qq004.mp3</file>
 		<file>nb\mp3\right.mp3</file>
+		<file>nb\mp3\Rr.mp3</file>
+		<file>nb\mp3\Ss.mp3</file>
 		<file>nb\mp3\start.mp3</file>
 		<file>nb\mp3\start.wav</file>
 		<file>nb\mp3\study.mp3</file>
 		<file>nb\mp3\test_end.mp3</file>
 		<file>nb\mp3\test_start.mp3</file>
 		<file>nb\mp3\ti.mp3</file>
-		<file>nb\mp3\Windows XP ��Ϣ��.wav</file>
-		<file>nb\mp3\Windows XP ����.mp3</file>
-		<file>nb\mp3\Windows XP ����.wav</file>
-		<file>nb\mp3\Windows XP ������������ֹ.mp3</file>
-		<file>nb\mp3\Windows XP ������������ֹ.wav</file>
-		<file>nb\mp3\Windows XP ����.mp3</file>
-		<file>nb\mp3\Windows XP ����.wav</file>
+		<file>nb\mp3\Tt.mp3</file>
+		<file>nb\mp3\Uu.mp3</file>
+		<file>nb\mp3\Vv.mp3</file>
+		<file>nb\mp3\Windows XP 信息栏.wav</file>
+		<file>nb\mp3\Windows XP 回收.mp3</file>
+		<file>nb\mp3\Windows XP 回收.wav</file>
+		<file>nb\mp3\Windows XP 弹出窗口已阻止.mp3</file>
+		<file>nb\mp3\Windows XP 弹出窗口已阻止.wav</file>
+		<file>nb\mp3\Windows XP 气球.mp3</file>
+		<file>nb\mp3\Windows XP 气球.wav</file>
 		<file>nb\mp3\wrong.mp3</file>
+		<file>nb\mp3\Ww.mp3</file>
+		<file>nb\mp3\Xx.mp3</file>
+		<file>nb\mp3\Yy.mp3</file>
+		<file>nb\mp3\Zz.mp3</file>
+		<file>nb\mp3\三字经.mp3</file>
+		<file>nb\mp3\弟子规.mp3</file>
+		<file>nb\mp3\百家姓.mp3</file>
+		<file>nb\mp3\益智游戏.mp3</file>
 	</qresource>
 </RCC> 

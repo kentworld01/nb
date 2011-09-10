@@ -132,13 +132,14 @@ Rectangle {
                     var val = dict_value.dict("no", input.text )
                     var tv = parseInt( val )
                     console.log( tv )
-                    //list.currentIndex = parseInt( val )
                     list.positionViewAtIndex ( tv, ListView.Beginning )
-                    var val = ""
-                    val = dict_value.dict("sound", input.text )
-                    sound.text = val
-                    val = dict_value.dict("content", input.text )
-                    content.text = val
+                    user_input( input.text );
+
+                    //var val = ""
+                    //val = dict_value.dict("sound", input.text )
+                    //sound.text = val
+                    //val = dict_value.dict("content", input.text )
+                    //content.text = val
                     container.accepted()
                 }
                 text: "请输入字词"

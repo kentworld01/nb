@@ -10,6 +10,7 @@ Image {
          ShockIcon{ x:530;y:290; cmd:path + "funs/main.qml" }
          ShockIcon{ x:720;y:300; cmd_type: "dir"; cmd:'user/小学/动漫教学' }
          ExitIcon{ x:960;y:580; cmd:path + "../main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 
 

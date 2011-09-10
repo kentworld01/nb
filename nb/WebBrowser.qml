@@ -78,3 +78,4 @@ Rectangle {
         anchors { right: parent.right; rightMargin: 8; left: parent.left; bottom: parent.bottom }
     }
 }
+

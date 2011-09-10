@@ -12,10 +12,12 @@ Rectangle {
     ListModel {
         id: appModel
         ListElement { name: "百科知识"; icon: "menu/app.png"; cmd_type: "auto"; cmd: "data/百科知识" }
-        ListElement { name: "词典大全"; icon: "menu/app.png"; cmd: "menu/dicts/main.qml"}
+        //ListElement { name: "词典大全"; icon: "menu/app.png"; cmd: "menu/dicts/main.qml"}
+        ListElement { name: "小学奥数"; icon: "menu/app.png";  cmd_type: "auto"; cmd: "data/小学奥数"}
         ListElement { name: "乐园"; icon: "menu/app.png"; cmd: "menu/plays/main.qml"}
     }
     IconList{ board_x:200; board_y:100; board_width:600; board_height:500; bg: path + "bg.jpg"; listItem: appModel }
     ExitIcon{ x:900;y:530; cmd:"menu/primary_school/main.qml" }
+    QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
 }
 

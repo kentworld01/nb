@@ -18,6 +18,12 @@ Rectangle {
         id: icon_list_bg
         source: bg
         anchors.centerIn: parent 
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "iconlist click" )
+            }
+        }
 
         Component {
             id: appDelegate
@@ -55,7 +61,7 @@ Rectangle {
                 SequentialAnimation on x {
                     running:false
                     id:animation1
-                    loops:50
+                    loops:10
                     PropertyAnimation{
                         easing.type:Easing.InOutElastic; to:x+8; duration:10
                     }
@@ -66,7 +72,7 @@ Rectangle {
                 SequentialAnimation on y{
                     id:animation2
                     running:false
-                    loops:50
+                    loops:10
                     PropertyAnimation{
                         easing.type:Easing.InOutBounce; to:y+8; duration:10
                     }
