@@ -733,7 +733,7 @@ Rectangle{
 }
 """
 
-s_text_book_base = """
+s_qml_text_book_base = """
 import QtQuick 1.0
 import QtWebKit 1.0
 Rectangle{
@@ -769,7 +769,7 @@ Rectangle{
         }
         else if( cmd_type == "exercise"){
             //cmd( "sound", read_string )
-            info_win.y = -100
+            info_win.y = -200
             var lines = page.exercise_string.split( '|' )
             var items = lines[0].split( '\t' )
             console.log( page.exercise_string )
@@ -787,22 +787,49 @@ Rectangle{
                 if( exercise_no >= 0 ){
                 }
                 else{
-                    page.exercise_no = -1
+                    var i;
                     var lines = cmd_str.split('|')
-                    var items = lines[0].split('\t')
-                    //console.log( items.length )
-                    if( items.length == 1 ){
-                        info_en.text = ""
-                        info_cn.text = ""
-                        cmd( "sound", items[0] )
+                    var sound_str = ""
+                    var sound_str_en = ""
+                    var sound_str_cn = ""
+                    page.exercise_no = -1
+                    console.log( lines.length )
+                    info_en.text = ""
+                    info_cn.text = ""
+                    for( i=0; i< lines.length; i++ ){
+                        var items = lines[i].split('\t')
+                        console.log( items.length )
+                        if( items.length == 1 && i == 0 ){
+                            info_en.text = ""
+                            info_cn.text = ""
+                            //cmd( "sound", items[0] )
+                            console.log( items[0] )
+                            console.log( sound_str_en )
+                            sound_str_en = items[0]
+                            sound_str_cn = ""
+                        }
+                        else if( items.length >= 4 ){
+                            info_en.text += items[0] + "\\n"
+                            info_cn.text += items[1] + "\\n"
+                            //var sound_str = items[2] + "," + items[3]
+                            //cmd( "switch_sound", sound_str )
+                            if( i == 0 ){
+                                sound_str_en += items[2]
+                                sound_str_cn += items[3]
+                            }
+                            else{
+                                sound_str_en += ' ' + items[2]
+                                sound_str_cn += ' ' + items[3]
+                            }
+                        }
+                        console.log( sound_str_en )
                     }
-                    else if( items.length >= 4 ){
-                        info_en.text = items[0]
-                        info_cn.text = items[1]
-                        var sound_str = items[2] + "," + items[3]
-                        cmd( "switch_sound", sound_str )
-                        //cmd( "sound", sound_str )
+                    sound_str = sound_str_en 
+                    if( sound_str_cn.length > 1 ){
+                        sound_str += "," + sound_str_cn
                     }
+                    console.log( sound_str )
+                    cmd( "switch_sound", sound_str )
                 }
             }
         }
@@ -889,7 +916,7 @@ Rectangle{
         hoverEnabled: true
         onClicked:{
             info_win.x = 0
-            info_win.y = -100
+            info_win.y = -200
             console.log( "bg click" )
             //console.log( mouse.x )
             //console.log( mouse.y )
@@ -1029,7 +1056,7 @@ Rectangle{
                     console.log( "set red" )
                     info_win_state.color = "red"
                     no_info_win = 1
-                    info_win.y = -100
+                    info_win.y = -200
                 }
                 else{
                     console.log( "set yellow" )
@@ -1043,8 +1070,8 @@ Rectangle{
     }
     Rectangle{
         id: info_win
-        x:-100
-        y:-100
+        x:-200
+        y:-200
         width:400
         height:150
         MouseArea{
@@ -1071,20 +1098,53 @@ Rectangle{
             font.pixelSize: 18
             text:"Test text"
         }
-        */
         TextEdit {
             id: info_en
             x:10
-            y:10
-            width: parent.width - 20
+            y:14
+            width: parent.width - 40
             height: 50
             focus: true
             wrapMode: TextEdit.Wrap
-            text: "Test text"
+            text: ""
             color: "black"
             font.pixelSize: 20
             readOnly: true
-            //onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+        }
+        */
+        Flickable {
+            id: flick_en
+            x:10
+            y:14
+            width: parent.width - 40
+            height: 50
+            contentWidth: info_en.paintedWidth
+            contentHeight: info_en.paintedHeight
+            interactive: true
+            clip: true
+            function ensureVisible(dict_page) {
+                if (contentX >= dict_page.x)
+                    contentX = dict_page.x;
+                else if (contentX+width <= dict_page.x+dict_page.width)
+                    contentX = dict_page.x+dict_page.width-width;
+                if (contentY >= dict_page.y)
+                    contentY = dict_page.y;
+                else if (contentY+height <= dict_page.y+dict_page.height)
+                    contentY = dict_page.y+dict_page.height-height;
+            }
+            TextEdit {
+                id: info_en
+                width: flick_en.width
+                height: flick_en.height
+                onCursorRectangleChanged: flick_en.ensureVisible(cursorRectangle)
+
+                focus: true
+                wrapMode: TextEdit.Wrap
+                text: ""
+                color: "black"
+                font.pixelSize: 20
+                readOnly: true
+            }
         }
         /*
         Text{
@@ -1095,24 +1155,57 @@ Rectangle{
             font.pixelSize: 20
             text:"Test text"
         }
-        */
         TextEdit {
             id: info_cn
             x:10
             y:70
-            width: parent.width - 20
+            width: parent.width - 40
             height: 50
             focus: true
             wrapMode: TextEdit.Wrap
-            text: "Test text"
+            text: ""
             color: "black"
             font.pixelSize: 20
             readOnly: true
-            //onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+        }
+        */
+        Flickable {
+            id: flick_cn
+            x:10
+            y:70
+            width: parent.width - 40
+            height: 50
+            contentWidth: info_en.paintedWidth
+            contentHeight: info_en.paintedHeight
+            interactive: true
+            clip: true
+            function ensureVisible(dict_page) {
+                if (contentX >= dict_page.x)
+                    contentX = dict_page.x;
+                else if (contentX+width <= dict_page.x+dict_page.width)
+                    contentX = dict_page.x+dict_page.width-width;
+                if (contentY >= dict_page.y)
+                    contentY = dict_page.y;
+                else if (contentY+height <= dict_page.y+dict_page.height)
+                    contentY = dict_page.y+dict_page.height-height;
+            }
+            TextEdit {
+                id: info_cn
+                width: flick_cn.width
+                height: flick_cn.height
+                onCursorRectangleChanged: flick_cn.ensureVisible(cursorRectangle)
+
+                focus: true
+                wrapMode: TextEdit.Wrap
+                text: ""
+                color: "black"
+                font.pixelSize: 20
+                readOnly: true
+            }
         }
         Text{
             x:330
-            y:10
+            y:2
             text:"英汉"
             MouseArea{
                 anchors.fill: parent
@@ -1132,7 +1225,7 @@ Rectangle{
                     console.log( "close info win" )
                     page.state = ""
                     info_win.x = 0
-                    info_win.y = -100
+                    info_win.y = -200
                 }
             }
         }
@@ -2141,6 +2234,7 @@ def get_qml_key_study_list_string( dir, ls ):
         else:
             do_cmd = 'key_study %s %d %s'%( dir,i,action)
 
+        ts = check_quote( ts )
         tmp_str = "ListElement { name: '%s'; cmd_type: 'text_book'; cmd: '%s'}\n"%(ts, do_cmd )
         str += tmp_str
     str += items[1].decode('utf8')
@@ -2283,7 +2377,26 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
                         item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[2]) )
                         item.setAttribute( 'text', iis[3] )
             except:
-                _d( sfn )
+                #_d( sfn )
+                sfn = sfn
+                sfn = u"%s%s"%(path, u'课文朗读.txt' )
+                try:
+                    slines = zf_extractfile( zf, sfn ).split( "\n" )
+                    for l in slines:
+                        l = chop(l)
+                        l = l.decode( 'gbk' )
+                        iis = l.split( '\t' )
+                        if len( iis ) >= 3 :
+                            item = doc.createElement( 'rc' )
+                            rc_root.appendChild( item )
+                            item.setAttribute( 'pos', "1" )
+                            item.setAttribute( 'sound', "%s"%(iis[0]) )
+                            #item.setAttribute( 'sound', "%smp3/%s.mp3"%(g_zf_path,iis[1]) )
+                            #item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[2]) )
+                            item.setAttribute( 'mov', "%smov/%s.mov"%(g_zf_path,iis[1]) )
+                            item.setAttribute( 'text', iis[2] )
+                except:
+                    _d( sfn )
         if rc_root.attribute( 'action' ) == 'k' :
             # 翻译练习.txt
             #print( u'翻译练习'.encode('gbk') )
@@ -2321,7 +2434,26 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
                         item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[1]) )
                         item.setAttribute( 'cn', iis[2] )
             except:
-                _d( sfn )
+                #_d( sfn )
+                sfn = sfn
+                sfn = u"%s%s"%(path, u'单词学习.txt' )
+                #print sfn
+                try:
+                    slines = zf_extractfile( zf, sfn ).split( "\n" )
+                    for l in slines:
+                        l = chop(l)
+                        l = l.decode( 'gbk' )
+                        #print l
+                        iis = l.split( '\t' )
+                        if len( iis ) >= 3 :
+                            item = doc.createElement( 'rc' )
+                            rc_root.appendChild( item )
+                            item.setAttribute( 'sound', iis[0] )
+                            #item.setAttribute( 'mov', iis[1] )
+                            item.setAttribute( 'mov', "%smov/%s.mov"%(g_zf_path,iis[1]) )
+                            item.setAttribute( 'cn', iis[2] )
+                except:
+                    _d( sfn )
         if rc_root.attribute( 'action' ) == 'm' :
             # 单词连连看.txt
             #print( u'单词连连看'.encode('gbk') )
@@ -2358,6 +2490,11 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
                     item.setAttribute( 'title', iis[3] )
     #print "VVVVVVVVVVVVVVVVVVVVV"
 
+
+def check_quote( tv ):
+    tv = tv.replace( "\"", "\\\"" )
+    tv = tv.replace( "\'", "\\\'" )
+    return tv
 
 def chop( str ):
     if len( str ) <= 0 :
@@ -2596,9 +2733,6 @@ def open_text_book_data_from_zip_file( str ):
 
 
 
-def check_quote( tv ):
-    tv = tv.replace( "\"", "\\\"" )
-    return tv
 
 
 def get_text_book_study_page_read_data( page_no ):
@@ -2623,6 +2757,7 @@ def get_text_book_study_page_read_data( page_no ):
     if len( mp3_str ) > 1 :
         mp3_str = mp3_str[:-1]
     #print "read mp3_str = %s"%mp3_str
+    mp3_str = check_quote( mp3_str )
     return mp3_str
 
 def get_text_book_study_page_exercise_data( page_no ):
@@ -2638,6 +2773,7 @@ def get_text_book_study_page_exercise_data( page_no ):
     if len( mp3_str ) > 1 :
         mp3_str = mp3_str[:-1]
     #print "exercise mp3_str = %s"%mp3_str
+    mp3_str = check_quote( mp3_str )
     return mp3_str
 
 def get_text_book_study_page_explain_data( page_no ):
@@ -2652,6 +2788,7 @@ def get_text_book_study_page_explain_data( page_no ):
     if len( mp3_str ) > 1 :
         mp3_str = mp3_str[:-1]
     #print "explain mp3_str = %s"%mp3_str
+    mp3_str = check_quote( mp3_str )
     return mp3_str
 
 def get_text_book_study_page_study_data( page_no ):
@@ -2683,10 +2820,12 @@ def get_text_book_study_page_study_data( page_no ):
                 str += item.attribute( 'en_mp3' ) + '\t'
                 str += item.attribute( 'cn_mp3' ) 
                 tv += str + "|"
-            if( len( tv ) > 1 ):
-                tv = tv[:-1]
+            #if( len( tv ) > 1 ):
+                #tv = tv[:-1]
+            tv = chop( tv )
             tv = check_quote( tv );
             value = "%s"%tv
+            #_d( value )
             #print value
         elif type == "mp3":
             value = value
@@ -2701,7 +2840,11 @@ def get_text_book_study_page_study_data( page_no ):
     # copy the file
     fn = g_zf_path + "cks/pic/r%d.jpg"%page_no
     #print "ready %s file from package"%fn
-    buf = zf_extractfile( g_zf, fn )
+    try:
+        buf = zf_extractfile( g_zf, fn )
+    except:
+        _d( fn )
+        buf = get_qml_file_data_by_qt( "images/bird.png" )
     try:
         os.remove( "tmp/tmp%d.jpg"%g_rand_value )
     except:
@@ -2770,7 +2913,7 @@ def get_text_book_string_key_study_o( str ):
     task = rc.childNodes().at( int(cmds[2]) ).toElement()
     dir = task.attribute( 'dir' )
     item_count = task.childNodes().count()
-    _d( item_count )
+    #_d( item_count )
     item = task.childNodes().at( item_pos ).toElement()
     sound = item.attribute( 'sound' ) 
     pos = item.attribute( 'pos' ) 
@@ -2779,6 +2922,7 @@ def get_text_book_string_key_study_o( str ):
 
     qml_str = s_key_study_action_o 
     qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
+    #_d( pos )
     pos = int(pos)
     qml_str = qml_str.replace( "s_key_study_action_o_text%d"%pos, text )
     qml_str = qml_str.replace( "s_key_study_action_o_text1", "" )
@@ -2797,7 +2941,12 @@ def get_text_book_string_key_study_o( str ):
     qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
 
     fn = mov
-    buf = zf_extractfile( g_zf, fn )
+    try:
+        buf = zf_extractfile( g_zf, fn )
+    except:
+        _d( fn )
+        buf = get_qml_file_data_by_qt( "images/bird.png" )
+
     try:
         os.remove( "tmp/tmp%d.jpg"%g_rand_value )
     except:
@@ -2811,7 +2960,7 @@ def get_text_book_string_key_study_o( str ):
     f.close()
     bg = "file:///%s/tmp/tmp%d.jpg"%(os.getcwd(), g_rand_value)
     bg = bg.replace( "\\", "/" )
-    _d( bg )
+    #_d( bg )
     qml_str = qml_str.replace( "s_text_book_page_bg_file", bg )
     cmd( "sound", sound )
 
@@ -2955,7 +3104,7 @@ def get_text_book_string_key_study_m( str ):
         en_cn_list.append( [en,cn] )
     #Cell{color:"black";x:300;y:200; cn:"q"}
     #Cell{color:"red";x:100;y:100}
-    cell_color = ['gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen']
+    cell_color = ['gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen', 'gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen']
     y = 100
     for c in en_cn_list:
         tstr = "Cell{color:'black';x:500;y:%d; en:'%s'; cn:'%s' }\n"%( y, file_name_tran(c[0]), c[1] )
@@ -2967,9 +3116,11 @@ def get_text_book_string_key_study_m( str ):
         c = en_cn_list[ pos ]
         del en_cn_list[ pos ]
         en_cn_list.append( c )
+    _d( len( en_cn_list ) )
     for i in range( len(en_cn_list) ):
         #pos = random.randint( 0, len(en_cn_list)-1 )
         pos = i
+        _d(pos)
         tstr = "Cell{color:'%s';x:100;y:%d; en:'%s';  }\n"%( cell_color[i], y,  file_name_tran( en_cn_list[pos][0] ) )
         qml_str += tstr
         y += 50
@@ -3110,12 +3261,14 @@ def get_text_book_string_key_study( str ):
         ls.append( no )
 
     str = get_qml_key_study_list_string(dir, ls)
+    sys_save_tmp_file( str, "key_study.qml" )
     return str
 
 def get_text_book_string_study( str ):
     global g_text_book_now_page
     global g_rand_value
-    text_book_base = s_text_book_base.decode('utf8')
+    
+    text_book_base = s_qml_text_book_base.decode('utf8')
     text_book_base = text_book_base.replace( "s_text_book_read_string", get_text_book_study_page_read_data( g_text_book_now_page ) )
     text_book_base = text_book_base.replace( "s_text_book_explain_string", get_text_book_study_page_explain_data( g_text_book_now_page ) )
     text_book_base = text_book_base.replace( "s_text_book_exercise_string", get_text_book_study_page_exercise_data( g_text_book_now_page ) )
@@ -3153,9 +3306,9 @@ def get_text_book_string( str ):
     if str == "main":
         return get_text_book_string_main( str )
     if cmds[0] == "key_study":
-        _d( str )
+        #_d( str )
         if len(cmds) >= 4 :
-            _d( cmds[3] )
+            #_d( cmds[3] )
             if cmds[3] == 'l':
                 return get_text_book_string_key_study( str )
             elif cmds[3] == 'o':
@@ -3307,12 +3460,13 @@ def get_qml_login_string():
         str = str.replace( "s_qml_login_auto_login_color", "red" )
     else:
         str = str.replace( "s_qml_login_auto_login_color", "blue" )
-    if g_remeber_login == "1":
+    if g_remeber_password == "1":
         str = str.replace( "s_qml_login_remeber_password_color", "red" )
     else:
         str = str.replace( "s_qml_login_remeber_password_color", "blue" )
     str = str.replace( "s_qml_login_user", g_user )
     str = str.replace( "s_qml_login_password", g_password )
+    cmd( "set_quit", "do_login" )
     return str
 
 def do_login( str ):
@@ -3355,9 +3509,12 @@ def get_qml( type_str, str ):
         if do_login( str ) == 1 :
             type_str = "auto"
             str = "menu/main.qml"
+            g_quit_command = 'quit'
         else:
-            type_str = "show"
-            str = "menu/login.qml"
+            #type_str = "show"
+            #str = "menu/login.qml"
+            type_str = "show_login"
+            str = ""
 
     if( type_str == "auto" ):
         str = package_file_deal( str )
@@ -3388,6 +3545,7 @@ def get_qml( type_str, str ):
             # show study page
             #str = "study"
             str = "main"
+            g_text_book_now_page = 1
         elif str.endswith( g_package_data_sub_name ):
             # use dir
             type_str = "dir"
@@ -3417,18 +3575,24 @@ def get_qml( type_str, str ):
             str = g_quit_command[10:]
             _d( str )
             g_quit_command = 'quit'
+        elif g_quit_command == "do_login" :
+            type_str = "show_login"
+            str = ""
         elif g_quit_command == "quit":
             if( len(g_qml_lastest_string_list) < 1 ):
                 print "cmd quit"
-                sys_exit()
+                #sys_exit()
+                password_for_sys_exit()
             else:
                 type_str = "show"
                 if g_qml_str_lastest_type == "show" :
                     if( len(g_qml_lastest_string_list) <= 1 ):
                         print "cmd quit"
-                        sys_exit()
-                    str = g_qml_lastest_string_list.pop()
-                    str = g_qml_lastest_string_list.pop()
+                        #sys_exit()
+                        password_for_sys_exit()
+                    else:
+                        str = g_qml_lastest_string_list.pop()
+                        str = g_qml_lastest_string_list.pop()
                 else :
                     str = g_qml_lastest_string_list.pop()
 
@@ -3564,14 +3728,14 @@ def cmd( type, str ):
     global g_quit_command
     #print "type = %s"%type
     #print "str = %s"%str
-    _d( type )
-    _d( str )
+    #_d( type )
+    #_d( str )
     str = str.replace( "\\", "/" )
     if type == "text_book_show_pos" :
         print str
     elif type == "set_quit":
-        _d( type )
-        _d( str )
+        #_d( type )
+        #_d( str )
         g_quit_command = str
     elif type == "sound":
         g_mp3_play_list.clear()
@@ -3597,7 +3761,11 @@ def cmd( type, str ):
             g_switch_sound = iis[1]
         else:
             g_switch_sound = iis[0]
-        g_mp3_play_list.append( g_switch_sound )
+        # do the split g_switch_sound
+        #g_mp3_play_list.append( g_switch_sound )
+        ss = g_switch_sound.split( ' ' )
+        for sss in ss:
+            g_mp3_play_list.append( sss )
         g_mp3_play_close()
         g_mp3_play_start()
     elif type == "append_sound":
