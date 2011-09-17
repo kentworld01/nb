@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
 
+g_release = 1
+
 import os
 import sys
 import shutil
@@ -38,9 +40,10 @@ from PySide.QtDeclarative import QDeclarativeComponent
 def show_welcome( a1, a2 ):
     os.system( "show_pic.exe 15000" )
 
-g_thread = Thread( None, show_welcome, None, (1,1) )  
-g_thread.start()
-time.sleep( 2 )
+if g_release == 1 :
+    g_thread = Thread( None, show_welcome, None, (1,1) )  
+    g_thread.start()
+    time.sleep( 2 )
 #g_thread.exit()
 
 import nb_qrc
@@ -1141,6 +1144,134 @@ Rectangle{
 
 
 
+s_qml_login = """
+import QtQuick 1.0
+Rectangle {
+    id:dict_page
+    width: 1024
+    height: 768
+    color: "black"
+    property int remeber_password_flag: 0
+    property int auto_login_flag: 0
+    function do_login(){
+            console.log( "call login" )
+            var str
+            str = "do_login" + " " + auto_login_flag + " " + remeber_password_flag + " " + user.text + " " + password.text
+            console.log( str )
+            doSelect( "do_login", str )
+    }
+
+    Image{
+        //anchors.fill: parent
+        anchors.centerIn: parent
+        source: "images/登录1.jpg"
+    }
+    Rectangle {
+        id:remeber_password
+        x:588
+        y:434
+        width:10
+        height:10
+        opacity: 0.3
+        color:"s_qml_login_remeber_password_color"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "remeber password click" )
+                if( remeber_password_flag == 0 ){
+                    remeber_password.color = "red"
+                    remeber_password_flag = 1;
+                }
+                else{
+                    remeber_password.color = "blue"
+                    remeber_password_flag = 0;
+                }
+            }
+        }
+    }
+    Rectangle {
+        id:auto_login
+        x:670
+        y:434
+        width:10
+        height:10
+        opacity: 0.3
+        color:"s_qml_login_auto_login_color"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "auto login click" )
+                if( auto_login_flag == 0 ){
+                    auto_login.color = "red"
+                    auto_login_flag = 1;
+                }
+                else{
+                    auto_login.color = "blue"
+                    auto_login_flag = 0;
+                }
+            }
+        }
+    }
+    Rectangle {
+        id:login
+        x:602
+        y:465
+        width:46
+        height:30
+        opacity: 0.3
+        color:"blue"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                do_login()
+                console.log( "login click" )
+            }
+        }
+    }
+    TextInput{
+        id: user
+        x: 600
+        y: 360
+        width: parent.width - 12
+        //anchors.centerIn: parent
+        maximumLength:21
+        font.pixelSize: 20;
+        font.bold: true
+        color: "red"; 
+        selectionColor: "mediumseagreen"
+        focus: true
+        //acceptableInput: true
+        onAccepted:{
+            do_login()
+            container.accepted()
+        }
+        text: "s_qml_login_user"
+        selectByMouse: true
+    }
+    TextInput{
+        id: password
+        x: 600
+        y: 398
+        width: parent.width - 12
+        //anchors.centerIn: parent
+        maximumLength:21
+        font.pixelSize: 20;
+        font.bold: true
+        color: "red"; 
+        selectionColor: "mediumseagreen"
+        focus: true
+        //acceptableInput: true
+        onAccepted:{
+            do_login()
+            container.accepted()
+        }
+        text: "s_qml_login_password"
+        selectByMouse: true
+    }
+}
+"""
+
+
 s_qml_password = """
 import QtQuick 1.0
 Rectangle {
@@ -1149,25 +1280,57 @@ Rectangle {
     height: 768
     color: "black"
     Image{
-        anchors.fill: parent
-        //anchors.centerIn: parent
+        //anchors.fill: parent
+        anchors.centerIn: parent
         source: "images/password_bg.jpg"
+    }
+    Rectangle {
+        id:login
+        x:489
+        y:440
+        width:54
+        height:28
+        opacity: 0.3
+        color:"blue"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                doSelect( "sys_exit", input.text )
+                console.log( "login click" )
+            }
+        }
+    }
+    Rectangle {
+        id:exit
+        x:598
+        y:438
+        width:54
+        height:28
+        opacity: 0.3
+        color:"blue"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                doSelect( "quit", "" )
+                console.log( "login click" )
+            }
+        }
     }
     TextInput{
         id: input
-        x: 350
-        y: 350
-        width: parent.width - 12
+        x: 495
+        y: 380
+        width: parent.width - 50
         //anchors.centerIn: parent
-        maximumLength:21
-        font.pixelSize: 48;
+        maximumLength:15
+        font.pixelSize: 20;
         font.bold: true
         color: "red"; 
         selectionColor: "mediumseagreen"
         focus: true
         //acceptableInput: true
         onAccepted:{
-            doSelect( "sys_exit", "" )
+            doSelect( "sys_exit", input.text )
             //var val = dict_value.dict("no", input.text )
             //var tv = parseInt( val )
             //console.log( tv )
@@ -3084,6 +3247,93 @@ def package_file_deal( str ):
         return fn
     return str
 
+g_user = ""
+g_password = ""
+g_auto_login = ""
+g_remeber_password = ""
+def write_user_password():
+    global g_user 
+    global g_password 
+    global g_auto_login 
+    global g_remeber_password 
+
+    try:
+        f = open( "nb.ini", "w" )
+    except:
+        return
+    f.write( g_auto_login )
+    f.write( "\n" )
+    f.write( g_remeber_password )
+    f.write( "\n" )
+    f.write( g_user )
+    f.write( "\n" )
+    f.write( g_password )
+    f.write( "\n" )
+    _d( g_user )
+    _d( g_password )
+    f.close()
+def read_user_password():
+    global g_user 
+    global g_password 
+    global g_auto_login 
+    global g_remeber_password 
+
+    try:
+        f = open( "nb.ini", "r" )
+    except:
+        return
+    fc = f.read()
+    f.close()
+    lines = fc.split('\n')
+    if( len( lines ) >= 4 ):
+        g_auto_login = chop( lines[0] )
+        g_remeber_pawword = chop( lines[1] )
+        g_user = chop( lines[2] )
+        g_password = chop( lines[3] )
+        _d( g_auto_login )
+        _d( g_remeber_password )
+        _d( g_user )
+        _d( g_password )
+
+
+def get_qml_login_string():
+    global g_user 
+    global g_password 
+    global g_auto_login 
+    global g_remeber_password 
+
+    str = s_qml_login.decode( 'utf8' );
+    if g_auto_login == "1":
+        str = str.replace( "s_qml_login_auto_login_color", "red" )
+    else:
+        str = str.replace( "s_qml_login_auto_login_color", "blue" )
+    if g_remeber_login == "1":
+        str = str.replace( "s_qml_login_remeber_password_color", "red" )
+    else:
+        str = str.replace( "s_qml_login_remeber_password_color", "blue" )
+    str = str.replace( "s_qml_login_user", g_user )
+    str = str.replace( "s_qml_login_password", g_password )
+    return str
+
+def do_login( str ):
+    global g_user 
+    global g_password 
+    global g_auto_login 
+    global g_remeber_password 
+
+    _d( str[:10] )
+    if str[:10] == "do_login ":
+        return 0
+    iis = str.split( ' ' )
+    g_auto_login = iis[1]
+    g_remeber_password = iis[2]
+    _d( iis[3] )
+    g_user = chop(iis[3])
+    _d( iis[4] )
+    g_password = chop(iis[4])
+    write_user_password()
+    return login_by_wget( g_user, g_password )
+
 def get_qml( type_str, str ):
     global g_qml_lastest_string_list
     global g_qml_str_lastest_type 
@@ -3099,6 +3349,15 @@ def get_qml( type_str, str ):
     g_mp3_play_list.append( ":ti" )
     g_mp3_play_start()
     #time.sleep( 2 )
+
+    if( type_str == "do_login" ):
+        _d( str )
+        if do_login( str ) == 1 :
+            type_str = "auto"
+            str = "menu/main.qml"
+        else:
+            type_str = "show"
+            str = "menu/login.qml"
 
     if( type_str == "auto" ):
         str = package_file_deal( str )
@@ -3209,6 +3468,10 @@ def get_qml( type_str, str ):
         #print "append %s"%str 
         g_qml_lastest_string_list.append( str )
         qml_str = get_qml_file_string( str )
+    elif( type_str == "show_login" ):
+        g_qml_lastest_string_list.append( "menu/main.qml" )
+        qml_str = get_qml_login_string()
+        print qml_str
     elif( type_str == "dir" ):
         qml_str = get_qml_dir_string( str )
     elif( type_str == "test" ):
@@ -3546,7 +3809,8 @@ def login_test():
 
 if __name__ == '__main__':
 
-    login_test()
+    #login_test()
+    read_user_password()
 
     try:
         shutil.rmtree( "tmp" )
@@ -3586,8 +3850,13 @@ if __name__ == '__main__':
     g_view.setScene( scene )
     scene.addItem( g_qmlRoot )
 
-    #cmd( "show", "menu/t.qml" )
-    cmd( "show", "menu/main.qml" )
+    if g_release :
+        if g_auto_login == "1" and login_by_wget( g_user, g_password ) == 1:
+            cmd( "show", "menu/main.qml" )
+        else:
+            cmd( "show_login", "" )
+    else:
+        cmd( "show", "menu/main.qml" )
     #cmd( "show", "menu/dicts/main.qml" )
     #cmd( "dict", "新英汉" )
     #cmd( "show", "menu/primary_school/funs/encyclopedic/main.qml" )
@@ -3611,17 +3880,9 @@ if __name__ == '__main__':
     cursor = QPixmap()
     cursor.loadFromData( buf, "PNG" )
     app.setOverrideCursor(QCursor(cursor, 0, 0))
-    #nullCursor = QPixmap( "images/bird.png" );
-    #nullCursor = QPixmap(48, 48);
-    #nullCursor.load( "images/bird.png" )
-    #nullCursor.fill(QtCore.transparent)
-    #app.setOverrideCursor(QCursor(QtCore.Qt.CrossCursor))
-    #app.setOverrideCursor(QCursor(nullCursor))
 
 
-
-
-    if 0:
+    if g_release:
         g_qmlRoot.setProperty( "x", x )
         g_qmlRoot.setProperty( "y", y )
         g_view.showFullScreen()

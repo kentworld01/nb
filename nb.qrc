@@ -56,6 +56,7 @@
 		<file>nb\images\中学主界面.jpg</file>
 		<file>nb\images\学习机1.jpg</file>
 		<file>nb\images\欢迎.jpg</file>
+		<file>nb\images\登录1.jpg</file>
 		<file>nb\images\工具箱\Thumbs.db</file>
 		<file>nb\images\工具箱\仿真实验.png</file>
 		<file>nb\images\工具箱\史地生政.png</file>
@@ -128,6 +129,7 @@
 		<file>nb\images\首页\语文.png</file>
 		<file>nb\menu\app.png</file>
 		<file>nb\menu\bg.jpg</file>
+		<file>nb\menu\login.qml</file>
 		<file>nb\menu\main.qml</file>
 		<file>nb\menu\none.jpg</file>
 		<file>nb\menu\none.qml</file>
