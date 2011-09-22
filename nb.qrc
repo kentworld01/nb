@@ -31,6 +31,7 @@
 		<file>nb\images\Close.png</file>
 		<file>nb\images\dict_bg.jpg</file>
 		<file>nb\images\display.png</file>
+		<file>nb\images\dot_reader_bg.jpg</file>
 		<file>nb\images\edit-delete.png</file>
 		<file>nb\images\face-smile.png</file>
 		<file>nb\images\go-down-view.png</file>
@@ -38,6 +39,7 @@
 		<file>nb\images\go-next-view.png</file>
 		<file>nb\images\go-previous-view.png</file>
 		<file>nb\images\go-up-view.png</file>
+		<file>nb\images\key_study_bg.jpg</file>
 		<file>nb\images\list.png</file>
 		<file>nb\images\list_bg.png</file>
 		<file>nb\images\list_bg_old.jpg</file>
@@ -64,6 +66,10 @@
 		<file>nb\images\工具箱\英语.png</file>
 		<file>nb\images\工具箱\词典.png</file>
 		<file>nb\images\工具箱\语文.png</file>
+		<file>nb\images\工具箱-史地政生\Thumbs.db</file>
+		<file>nb\images\工具箱-史地政生\习题全解.png</file>
+		<file>nb\images\工具箱-史地政生\历史今天.png</file>
+		<file>nb\images\工具箱-史地政生\趣味百科.png</file>
 		<file>nb\images\工具箱-史地生政\Thumbs.db</file>
 		<file>nb\images\工具箱-史地生政\习题全解.png</file>
 		<file>nb\images\工具箱-史地生政\历史今天.png</file>
@@ -73,6 +79,7 @@
 		<file>nb\images\工具箱-数理化\元素周期表.png</file>
 		<file>nb\images\工具箱-数理化\公式学习.png</file>
 		<file>nb\images\工具箱-数理化\单位换算.png</file>
+		<file>nb\images\工具箱-数理化\单位转换.png</file>
 		<file>nb\images\工具箱-数理化\科学计算.png</file>
 		<file>nb\images\工具箱-数理化\计算器.png</file>
 		<file>nb\images\工具箱-英语\Thumbs.db</file>
@@ -110,6 +117,7 @@
 		<file>nb\images\开心一刻\Thumbs.db</file>
 		<file>nb\images\开心一刻\动漫.png</file>
 		<file>nb\images\开心一刻\博客.png</file>
+		<file>nb\images\开心一刻\影音.png</file>
 		<file>nb\images\开心一刻\游戏.png</file>
 		<file>nb\images\开心一刻\电子书.png</file>
 		<file>nb\images\开心一刻\电影.png</file>
@@ -126,6 +134,7 @@
 		<file>nb\images\首页\物理.png</file>
 		<file>nb\images\首页\生物.png</file>
 		<file>nb\images\首页\英语.png</file>
+		<file>nb\images\首页\视频教学.png</file>
 		<file>nb\images\首页\语文.png</file>
 		<file>nb\menu\app.png</file>
 		<file>nb\menu\bg.jpg</file>

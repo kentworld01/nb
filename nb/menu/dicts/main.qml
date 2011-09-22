@@ -15,7 +15,7 @@ Rectangle {
         ListElement { name: "动漫词典"; icon: "images/工具箱-词典/动漫词典.png"; cmd: "menu/none.qml"}
         ListElement { name: "现代汉语"; icon: "images/工具箱-词典/现代汉语.png"; cmd_type: "dict"; cmd: "现代汉语"}
         ListElement { name: "成语词典"; icon: "images/工具箱-词典/成语词典.png"; cmd_type: "dict"; cmd: "成语词典"}
-        ListElement { name: "汉英词典"; icon: "images/工具箱-词典/汉英词.png"; cmd_type: "dict"; cmd: "汉英词典"}
+        ListElement { name: "汉英词典"; icon: "images/工具箱-词典/汉英词典.png"; cmd_type: "dict"; cmd: "汉英词典"}
         ListElement { name: "古代汉语"; icon: "images/工具箱-词典/古代汉语.png"; cmd_type: "dict"; cmd: "古代汉语"}
         ListElement { name: "描红词典"; icon: "images/工具箱-词典/描红词典.png"; cmd_type: "auto"; cmd: "data/动漫字"}
         //ListElement { name: "下载词典"; icon: "images/工具箱-词典/.png"; cmd: "menu/none.qml"}

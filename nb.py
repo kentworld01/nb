@@ -38,7 +38,11 @@ from PySide.QtDeclarative import QDeclarativeEngine
 from PySide.QtDeclarative import QDeclarativeComponent
 
 def show_welcome( a1, a2 ):
-    os.system( "show_pic.exe 15000" )
+    os.system( "show_pic.exe" )
+
+if len( sys.argv ) >= 2:
+    if sys.argv[1] == 'w':
+        g_release = 0
 
 if g_release == 1 :
     g_thread = Thread( None, show_welcome, None, (1,1) )  
@@ -50,6 +54,7 @@ import nb_qrc
 
 #nb_qrc.qInitResources()
 
+g_sys_path = ""
 g_path = "nb/"
 #g_text_book_sub_name = "zip"
 g_text_book_sub_name = "p"
@@ -87,9 +92,14 @@ Rectangle {
     height: 768
     color: "white"
     Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+    Image{
         anchors.centerIn: parent
         source: "s_text_book_page_bg_file"
     }
+    /*
     Text{
         id:text1
         x:300
@@ -98,10 +108,45 @@ Rectangle {
         font.pixelSize: 32
         text:"s_key_study_action_o_text1"
     }
+    */
+    Flickable {
+        id: flick_text1
+        x:300
+        y:150
+        width: 400
+        height: 400
+        contentWidth: text1.paintedWidth
+        contentHeight: text1.paintedHeight
+        interactive: true
+        clip: true
+        function ensureVisible(dict_page) {
+            if (contentX >= dict_page.x)
+                contentX = dict_page.x;
+            else if (contentX+width <= dict_page.x+dict_page.width)
+                contentX = dict_page.x+dict_page.width-width;
+            if (contentY >= dict_page.y)
+                contentY = dict_page.y;
+            else if (contentY+height <= dict_page.y+dict_page.height)
+                contentY = dict_page.y+dict_page.height-height;
+        }
+        TextEdit {
+            id: text1
+            width: flick_text1.width
+            height: flick_text1.height
+            onCursorRectangleChanged: flick_text1.ensureVisible(cursorRectangle)
+
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text:"s_key_study_action_o_text1"
+            color: "black"
+            font.pixelSize: 32
+            readOnly: true
+        }
+    }
     Text{
         id:text2
         x:600
-        y:150
+        y:100
         color: "black"
         font.pixelSize: 32
         text:"s_key_study_action_o_text2"
@@ -172,6 +217,8 @@ Rectangle {
                 }
             }
         }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
 }
 """
 
@@ -181,6 +228,16 @@ Rectangle {
     width: 1024
     height: 768
     color: "white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
     Text{
         id:text1
         x:300
@@ -263,10 +320,290 @@ Rectangle {
                 }
             }
         }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
 }
 """
 
-s_key_study_action_b = """
+s_key_study_action_f = """
+import QtQuick 1.0
+Rectangle {
+    width: 1024
+    height: 768
+    color: "white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
+    /*
+    Text{
+        id:text1
+        x:300
+        y:200
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text1"
+    }
+    */
+    Flickable {
+        id: flick_text1
+        x:300
+        y:150
+        width: 400
+        height: 300
+        contentWidth: text1.paintedWidth
+        contentHeight: text1.paintedHeight
+        interactive: true
+        clip: true
+        function ensureVisible(dict_page) {
+            if (contentX >= dict_page.x)
+                contentX = dict_page.x;
+            else if (contentX+width <= dict_page.x+dict_page.width)
+                contentX = dict_page.x+dict_page.width-width;
+            if (contentY >= dict_page.y)
+                contentY = dict_page.y;
+            else if (contentY+height <= dict_page.y+dict_page.height)
+                contentY = dict_page.y+dict_page.height-height;
+        }
+        TextEdit {
+            id: text1
+            width: flick_text1.width
+            height: flick_text1.height
+            onCursorRectangleChanged: flick_text1.ensureVisible(cursorRectangle)
+
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text:"s_key_study_action_o_text1"
+            color: "black"
+            font.pixelSize: 32
+            readOnly: true
+        }
+    }
+    Text{
+        id:text2
+        x:300
+        y:100
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text2"
+    }
+    Text{
+        id:text3
+        x:400
+        y:150
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text3"
+    }
+        Item{
+            x:0
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-previous-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "prev page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_prev_page" )
+                }
+            }
+        }
+        Item{
+            x:1024-48
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-next-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "next page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_next_page" )
+                }
+            }
+        }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
+}
+"""
+
+s_key_study_action_j = """
+import QtQuick 1.0
+Rectangle {
+    width: 1024
+    height: 768
+    color: "white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
+    /*
+    Text{
+        id:text1
+        x:300
+        y:200
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text1"
+    }
+    */
+    Flickable {
+        id: flick_text1
+        x:300
+        y:150
+        width: 400
+        height: 300
+        contentWidth: text1.paintedWidth
+        contentHeight: text1.paintedHeight
+        interactive: true
+        clip: true
+        function ensureVisible(dict_page) {
+            if (contentX >= dict_page.x)
+                contentX = dict_page.x;
+            else if (contentX+width <= dict_page.x+dict_page.width)
+                contentX = dict_page.x+dict_page.width-width;
+            if (contentY >= dict_page.y)
+                contentY = dict_page.y;
+            else if (contentY+height <= dict_page.y+dict_page.height)
+                contentY = dict_page.y+dict_page.height-height;
+        }
+        TextEdit {
+            id: text1
+            width: flick_text1.width
+            height: flick_text1.height
+            onCursorRectangleChanged: flick_text1.ensureVisible(cursorRectangle)
+
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text:"s_key_study_action_o_text1"
+            color: "black"
+            font.pixelSize: 32
+            readOnly: true
+        }
+    }
+    Text{
+        id:text2
+        x:400
+        y:400
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text2"
+    }
+    Text{
+        id:text3
+        x:400
+        y:150
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text3"
+    }
+        Item{
+            x:0
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-previous-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "prev page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_prev_page" )
+                }
+            }
+        }
+        Item{
+            x:1024-48
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-next-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "next page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_next_page" )
+                }
+            }
+        }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
+}
+"""
+
+s_key_study_action_b_2 = """
 import QtQuick 1.0
 Rectangle {
     width: 1024
@@ -358,6 +695,115 @@ Rectangle {
                 }
             }
         }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
+}
+"""
+
+s_key_study_action_b = """
+import QtQuick 1.0
+Rectangle {
+    width: 1024
+    height: 768
+    color: "white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
+    Image{
+        anchors.centerIn: parent
+        source: "s_text_book_page_bg_file"
+    }
+    Text{
+        id:text1
+        x:300
+        y:100
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text1"
+    }
+    Text{
+        id:text2
+        x:300
+        y:150
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text2"
+    }
+    Text{
+        id:text3
+        x:400
+        y:150
+        color: "black"
+        font.pixelSize: 32
+        text:"s_key_study_action_o_text3"
+    }
+        Item{
+            x:0
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-previous-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "prev page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_prev_page" )
+                }
+            }
+        }
+        Item{
+            x:1024-48
+            y:700
+            width:48
+            height:48
+            Rectangle{
+                width:48
+                height:48
+                //anchors.fill: parent
+                opacity: 0.6
+                color:"yellow"
+                radius: 12
+                border.color: "Black"; border.width: 2
+            }
+            Image{
+                x:8
+                y:8
+                //anchors.fill: parent
+                source: "images/go-next-view.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked:{
+                    console.log( "next page" )
+                    //bg.source= ""
+                    cmd( "text_book", "s_key_study_action_o_next_page" )
+                }
+            }
+        }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
 }
 """
 
@@ -561,6 +1007,17 @@ Rectangle {
     width: 1024
     height: 768
     color: "white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
+    /*
     Text{
         id:text1
         x:300
@@ -568,6 +1025,41 @@ Rectangle {
         color: "black"
         font.pixelSize: 32
         text:"s_key_study_action_o_text1"
+    }
+    */
+    Flickable {
+        id: flick_text1
+        x:300
+        y:150
+        width: 400
+        height: 300
+        contentWidth: text1.paintedWidth
+        contentHeight: text1.paintedHeight
+        interactive: true
+        clip: true
+        function ensureVisible(dict_page) {
+            if (contentX >= dict_page.x)
+                contentX = dict_page.x;
+            else if (contentX+width <= dict_page.x+dict_page.width)
+                contentX = dict_page.x+dict_page.width-width;
+            if (contentY >= dict_page.y)
+                contentY = dict_page.y;
+            else if (contentY+height <= dict_page.y+dict_page.height)
+                contentY = dict_page.y+dict_page.height-height;
+        }
+        TextEdit {
+            id: text1
+            width: flick_text1.width
+            height: flick_text1.height
+            onCursorRectangleChanged: flick_text1.ensureVisible(cursorRectangle)
+
+            focus: true
+            wrapMode: TextEdit.Wrap
+            text:"s_key_study_action_o_text1"
+            color: "black"
+            font.pixelSize: 32
+            readOnly: true
+        }
     }
     Text{
         id:text2
@@ -643,6 +1135,8 @@ Rectangle {
                 }
             }
         }
+    ExitIcon{ x:960;y:580; cmd_type: "quit"; cmd:"quit" }
+    QuitIcon{ x:960;y:10; cmd_type: "sys_quit"; cmd: "../main.qml" }
 }
 """
 
@@ -721,6 +1215,10 @@ import QtQuick 1.0
 Rectangle{
     anchors.fill: parent
     color:"white"
+    Image{
+        anchors.fill: parent
+        source: "images/key_study_bg.jpg"
+    }
     Image{
         source: "images/text_book_main.png"
         //SmallShockIcon{ x:450;y:300;width:200;height:50; cmd_type:"text_book"; cmd: "key_study" }
@@ -844,7 +1342,8 @@ Rectangle{
         else{
             if( x + 400 > 1024 )    x = 1024 - 400
             if( y + 100 > 768 )    y = 768 - 100
-            if( no_info_win == 0 ){
+            //if( info_en.text.length >= 0 && no_info_win == 0 )
+            if( info_en.text != "" && no_info_win == 0 ){
                 info_win.x = x
                 info_win.y = y
             }
@@ -911,6 +1410,10 @@ Rectangle{
     width:1192
     height:818
     color:"red"
+    Image{
+        anchors.fill: parent
+        source: "images/dot_reader_bg.jpg"
+    }
     MouseArea{
         anchors.fill: parent
         hoverEnabled: true
@@ -1137,7 +1640,6 @@ Rectangle{
                 width: flick_en.width
                 height: flick_en.height
                 onCursorRectangleChanged: flick_en.ensureVisible(cursorRectangle)
-
                 focus: true
                 wrapMode: TextEdit.Wrap
                 text: ""
@@ -1194,7 +1696,6 @@ Rectangle{
                 width: flick_cn.width
                 height: flick_cn.height
                 onCursorRectangleChanged: flick_cn.ensureVisible(cursorRectangle)
-
                 focus: true
                 wrapMode: TextEdit.Wrap
                 text: ""
@@ -1335,8 +1836,10 @@ Rectangle {
         focus: true
         //acceptableInput: true
         onAccepted:{
-            do_login()
-            container.accepted()
+            //do_login()
+            //container.accepted()
+            password.forceActiveFocus ()
+            //password.forceActiveFocus ()
         }
         text: "s_qml_login_user"
         selectByMouse: true
@@ -1350,6 +1853,7 @@ Rectangle {
         maximumLength:21
         font.pixelSize: 20;
         font.bold: true
+        echoMode:TextInput.Password
         color: "red"; 
         selectionColor: "mediumseagreen"
         focus: true
@@ -1361,6 +1865,8 @@ Rectangle {
         text: "s_qml_login_password"
         selectByMouse: true
     }
+    //ExitIcon{ x:960;y:580; cmd: "../main.qml" }
+    QuitIcon{ x:960;y:10; cmd: "../main.qml" }
 }
 """
 
@@ -1421,6 +1927,7 @@ Rectangle {
         color: "red"; 
         selectionColor: "mediumseagreen"
         focus: true
+        echoMode:TextInput.Password
         //acceptableInput: true
         onAccepted:{
             doSelect( "sys_exit", input.text )
@@ -1437,7 +1944,8 @@ Rectangle {
             //content.text = val
             container.accepted()
         }
-        text: "请输入退出密码"
+        text: ""
+        //text: "请输入退出密码"
         selectByMouse: true
     }
 }
@@ -1452,6 +1960,12 @@ Rectangle {
     width: 1024
     height: 768
     color: "white"
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
     function user_input( input_text ){
         var val = ""
         val = dict_value.dict("sound", input_text )
@@ -2154,10 +2668,6 @@ def get_dir_string( dir ):
 def get_qml_test_string( str ):
     return s_qml_test_string.decode('utf8')
 
-def file_name_tran( str ):
-    str = str.replace( "'", "\\'" )
-    str = str.lower()
-    return str
 
 def os_listdir( dir ):
     if dir[:5] == "data/":
@@ -2187,7 +2697,8 @@ def os_listdir( dir ):
                             if len(tis)==1 :
                                 ls.append( file_name_tran(iis[0]) )
                             elif len(tis)>=2 :
-                                if iis[0].endswith( 'mp3' ) or iis[0].endswith( 'gif' ) or iis[0].endswith('jpg') or iis[0].endswith('bat')or iis[0].endswith('txt')or iis[0].endswith('png')  :
+                                #if iis[0].endswith( 'mp3' ) or iis[0].endswith( 'gif' ) or iis[0].endswith('jpg') or iis[0].endswith('bat')or iis[0].endswith('txt')or iis[0].endswith('png')  :
+                                if iis[0].endswith( 'mp3' ) or iis[0].endswith( 'gif' ) or iis[0].endswith('jpg') or iis[0].endswith('bat') or iis[0].endswith('png')  :
                                     print "not show %s"%iis[0]
                                 else:
                                     ls.append( file_name_tran(iis[0]) )
@@ -2253,6 +2764,7 @@ def get_qml_dir_string( dir ):
         t_dir_str = "%s/%s"%(dir_str,filename)
         #t_dir_str = t_dir_str.encode( 'utf8' )
         #print t_dir_str
+        filename = filename.split('.')[0]
         tmp_str = "ListElement { name: '%s'; cmd_type: 'auto'; cmd: '%s'}\n"%(filename, t_dir_str )
         #print tmp_str
         str += tmp_str
@@ -2272,6 +2784,7 @@ def get_html_view_string( dir ):
     #str = str.replace( "s_dir_html_view_temp_dir", "http://www.soso.com" )
     str = str.replace( "s_dir_html_view_temp_dir", "file:///" + now_path +dir_str.encode('utf8') )
     #str = str.replace( "s_dir_html_view_temp_dir", "../"+dir_str.encode('utf8') )
+    _d( str )
     str = str.decode('utf8')
     #nb_qrc.qCleanupResources()
     #print str
@@ -2357,12 +2870,17 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
             #print rc_fn
             create_rc_node_tree( path, zf, rc_root, doc, rc_fn )
         # here do other action xml data.
-        if rc_root.attribute( 'action' ) == 'o' :
+        if rc_root.attribute( 'action' ) == 'o' or rc_root.attribute( 'action' ) == 'a' :
             # 课文朗读
             #print( u'课文朗读'.encode('gbk') )
-            sfn = u"%s%s"%(path, u'课文朗读cks.txt' )
+            tmp_fn = rc_root.attribute( 'target' )
+            _d( tmp_fn[:-4] )
+            print tmp_fn.encode('gbk')
+            sfn = u"%s%s"%(path, tmp_fn[:-4] + 'cks.txt' )
+            #sfn = u"%s%s"%(path, u'课文朗读cks.txt' )
             #print sfn
             try:
+                #_d( sfn )
                 slines = zf_extractfile( zf, sfn ).split( "\n" )
                 for l in slines:
                     l = chop(l)
@@ -2379,14 +2897,18 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
             except:
                 #_d( sfn )
                 sfn = sfn
-                sfn = u"%s%s"%(path, u'课文朗读.txt' )
+                tmp_fn = rc_root.attribute( 'target' )
+                _d( tmp_fn )
+                print tmp_fn.encode('gbk')
+                sfn = u"%s%s"%(path, tmp_fn )
+                #sfn = u"%s%s"%(path, u'课文朗读.txt' )
                 try:
                     slines = zf_extractfile( zf, sfn ).split( "\n" )
                     for l in slines:
                         l = chop(l)
                         l = l.decode( 'gbk' )
                         iis = l.split( '\t' )
-                        if len( iis ) >= 3 :
+                        if len( iis ) >= 2 and iis[0] != 'sound_path' and iis[0] != 'image_path' :
                             item = doc.createElement( 'rc' )
                             rc_root.appendChild( item )
                             item.setAttribute( 'pos', "1" )
@@ -2394,7 +2916,8 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
                             #item.setAttribute( 'sound', "%smp3/%s.mp3"%(g_zf_path,iis[1]) )
                             #item.setAttribute( 'mov', "%smov/%s_1.jpg"%(g_zf_path,iis[2]) )
                             item.setAttribute( 'mov', "%smov/%s.mov"%(g_zf_path,iis[1]) )
-                            item.setAttribute( 'text', iis[2] )
+                            if len( iis ) >= 3 :
+                                item.setAttribute( 'text', iis[2] )
                 except:
                     _d( sfn )
         if rc_root.attribute( 'action' ) == 'k' :
@@ -2414,6 +2937,72 @@ def create_rc_node_tree( path, zf, root, doc, rc_fn ):
                     item.setAttribute( 'en', iis[0] )
                     item.setAttribute( 'cn', iis[1] )
                     item.setAttribute( 'sound', iis[2] )
+        if rc_root.attribute( 'action' ) == 'f' :
+            # 综合练习.txt
+            #print( u' 综合练习'.encode('gbk') )
+            tmp_fn = rc_root.attribute( 'target' )
+            #sfn = u"%s%s"%(path, u'综合练习.txt' )
+            sfn = u"%s%s"%(path, tmp_fn )
+            #print sfn
+            slines = zf_extractfile( zf, sfn ).split( "\n" )
+            if len( slines ) >= 2 :
+                del slines[0]
+                del slines[0]
+                
+            for l in slines:
+                l = chop(l)
+                l = l.decode( 'gbk' )
+                #print l
+                iis = l.split( '\t' )
+                if len( iis ) >= 2 :
+                    item = doc.createElement( 'rc' )
+                    rc_root.appendChild( item )
+                    item.setAttribute( 'word', iis[0] )
+                    item.setAttribute( 'pinyin', iis[1] )
+        if rc_root.attribute( 'action' ) == 'j' :
+            # 综合练习.txt
+            #print( u' 综合练习'.encode('gbk') )
+            tmp_fn = rc_root.attribute( 'target' )
+            #sfn = u"%s%s"%(path, u'综合练习.txt' )
+            sfn = u"%s%s"%(path, tmp_fn )
+            #print sfn
+            slines = zf_extractfile( zf, sfn ).split( "\n" )
+            for l in slines:
+                l = chop(l)
+                l = l.decode( 'gbk' )
+                #print l
+                iis = l.split( '\t' )
+                if len( iis ) >= 3 :
+                    item = doc.createElement( 'rc' )
+                    rc_root.appendChild( item )
+                    item.setAttribute( 'type', iis[0] )
+                    #item.setAttribute( 'tmp', iis[1] )
+                    item.setAttribute( 'answer', iis[3] )
+                    #item.setAttribute( 'question', iis[4] )
+                    question = '\t'.join( iis[4:] )
+                    item.setAttribute( 'question', question )
+        if rc_root.attribute( 'action' ) == 'c' :
+            # 短语学习.txt
+            #print( u'短语学习'.encode('gbk') )
+            sfn = u"%s%s"%(path, u'短语学习.txt' )
+            #print sfn
+            try:
+                slines = zf_extractfile( zf, sfn ).split( "\n" )
+                for l in slines:
+                    l = chop(l)
+                    l = l.decode( 'gbk' )
+                    #print l
+                    iis = l.split( '\t' )
+                    if len( iis ) >= 3 :
+                        item = doc.createElement( 'rc' )
+                        rc_root.appendChild( item )
+                        item.setAttribute( 'sound', iis[0] )
+                        #item.setAttribute( 'mov', iis[1] )
+                        item.setAttribute( 'mov', "%smov/%s.mov"%(g_zf_path,iis[0]) )
+                        item.setAttribute( 'en', iis[1] )
+                        item.setAttribute( 'cn', iis[2] )
+            except:
+                _d( sfn )
         if rc_root.attribute( 'action' ) == 'b' :
             # 单词学习.txt
             #print( u'单词学习'.encode('gbk') )
@@ -2503,6 +3092,10 @@ def chop( str ):
         str = str[:-1]
         if len( str ) <= 0 :
             break;
+    return str
+def file_name_tran( str ):
+    str = str.replace( "'", "\\'" )
+    str = str.lower()
     return str
 
 def create_book_command_file_xml( zf, doc, page, lines ):
@@ -2681,7 +3274,10 @@ def create_xml_file_from_zip_file( zf ):
 
     # reader
     book_fn = 'reader/book.txt'
-    create_book_node_tree( g_zf_path, zf, root, doc, book_fn )
+    try:
+        create_book_node_tree( g_zf_path, zf, root, doc, book_fn )
+    except:
+        _d( "create book node tree error" )
 
     #print doc.toString()
     return doc
@@ -2874,7 +3470,10 @@ def get_mp3_file( sn ):
         fn = g_zf_path + "mp3/%s.mp3"%sn
         fn = file_name_tran( fn )
         _d( fn )
-        buf = zf_extractfile( g_zf, fn )
+        try:
+            buf = zf_extractfile( g_zf, fn )
+        except:
+            buf = get_qml_file_data_by_qt( "mp3/da.mp3" )
     if( g_mp3_play != "" ):
         g_mp3_play_close()
     f = open( "tmp/tmp.mp3", "wb" )
@@ -2919,10 +3518,9 @@ def get_text_book_string_key_study_o( str ):
     pos = item.attribute( 'pos' ) 
     mov = item.attribute( 'mov' )
     text = item.attribute( 'text' )
-
     qml_str = s_key_study_action_o 
     qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
-    #_d( pos )
+    _d( pos )
     pos = int(pos)
     qml_str = qml_str.replace( "s_key_study_action_o_text%d"%pos, text )
     qml_str = qml_str.replace( "s_key_study_action_o_text1", "" )
@@ -2968,6 +3566,153 @@ def get_text_book_string_key_study_o( str ):
     #print qml_str
     return qml_str
 
+def get_text_book_string_key_study_d( str ):
+    global g_zf
+    global g_rand_value
+    global g_text_book_now_page
+
+    #_d( str )
+    item_pos = 0
+    cmds = str.split(' ')
+    if len( cmds ) >= 5:
+        item_pos = int( cmds[4] )
+    #_d( cmds[1] )
+    #_d( cmds[2] )
+    #_d( cmds[3] )
+    rc = g_text_book_data.elementsByTagName( cmds[1] ).at(0).toElement()
+    rc = rc.nextSibling().toElement()
+    task = rc.childNodes().at( int(cmds[2]) ).toElement()
+
+    file = task.attribute( 'target' )
+    dir = task.attribute( 'dir' )
+    _d( dir )
+    _d( file )
+    iis = dir.split( '/' )
+    iis.pop()
+    file = '/'.join( iis ) + '/' + file
+    _d( file )
+
+    fn = file
+    try:
+        buf = zf_extractfile( g_zf, fn )
+    except:
+        _d( fn )
+        buf = get_qml_file_data_by_qt( "nb/error.txt" )
+    try:
+        os.remove( "tmp/tmp%d.jpg"%g_rand_value )
+    except:
+        print "del error"
+    g_rand_value = random.randint( 10000000, 99999999 )
+    fn = "tmp/tmp%d.txt"%g_rand_value
+    b = buf
+    #print b
+    str = b.decode( 'gbk' )
+    #str = b.decode( 'gbk' ).encode( 'utf16' )
+    #str = b.decode( 'gbk' ).encode( 'utf8' )
+    #str = b.decode( 'gbk' )
+    print str
+
+    f = codecs.open( fn, "wb", "utf16" )
+    #f = codecs.open( fn, "wb", "utf-8" )
+    f.write( str )
+    f.close()
+    #print >> open(fn,'w'), str
+
+    cmd( "auto", fn )
+    #cmd( "auto", "tmp1.txt" )
+    #cmd( "auto", "tmp.txt" )
+    return ""
+
+def get_text_book_string_key_study_f( str ):
+    global g_zf
+    global g_rand_value
+    global g_text_book_now_page
+    item_pos = 0
+    cmds = str.split(' ')
+    if len( cmds ) >= 5:
+        item_pos = int( cmds[4] )
+    #_d( cmds[1] )
+    #_d( cmds[2] )
+    #_d( cmds[3] )
+    rc = g_text_book_data.elementsByTagName( cmds[1] ).at(0).toElement()
+    rc = rc.nextSibling().toElement()
+    task = rc.childNodes().at( int(cmds[2]) ).toElement()
+    dir = task.attribute( 'dir' )
+    item_count = task.childNodes().count()
+    _d( item_count )
+    item = task.childNodes().at( item_pos ).toElement()
+    #sound = item.attribute( 'sound' ) 
+    word = item.attribute( 'word' ) 
+    pinyin = item.attribute( 'pinyin' )
+    qml_str = s_key_study_action_f
+    qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
+    #pos = int(pos)
+    #qml_str = qml_str.replace( "s_key_study_action_o_text%d"%pos, text )
+    qml_str = qml_str.replace( "s_key_study_action_o_text1", word )
+    qml_str = qml_str.replace( "s_key_study_action_o_text2", pinyin )
+    qml_str = qml_str.replace( "s_key_study_action_o_text3", "" )
+
+    if item_pos > 1:
+        prev_page = item_pos - 1
+    else:
+        prev_page = 0
+    if item_pos < item_count-1:
+        next_page = item_pos + 1
+    else:
+        next_page = item_count - 1
+    qml_str = qml_str.replace( "s_key_study_action_o_prev_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], prev_page ) )
+    qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
+
+    #cmd( "sound", sound )
+
+    cmd( "set_quit", "up_dir key_study %s"%dir )
+    #print qml_str
+    return qml_str
+def get_text_book_string_key_study_j( str ):
+    global g_zf
+    global g_rand_value
+    global g_text_book_now_page
+    item_pos = 0
+    cmds = str.split(' ')
+    if len( cmds ) >= 5:
+        item_pos = int( cmds[4] )
+    #_d( cmds[1] )
+    #_d( cmds[2] )
+    #_d( cmds[3] )
+    rc = g_text_book_data.elementsByTagName( cmds[1] ).at(0).toElement()
+    rc = rc.nextSibling().toElement()
+    task = rc.childNodes().at( int(cmds[2]) ).toElement()
+    dir = task.attribute( 'dir' )
+    item_count = task.childNodes().count()
+    _d( item_count )
+    item = task.childNodes().at( item_pos ).toElement()
+    #sound = item.attribute( 'sound' ) 
+    question = item.attribute( 'question' ) 
+    answer = item.attribute( 'answer' )
+    qml_str = s_key_study_action_j
+    qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
+    #pos = int(pos)
+    #qml_str = qml_str.replace( "s_key_study_action_o_text%d"%pos, text )
+    qml_str = qml_str.replace( "s_key_study_action_o_text1", question )
+    qml_str = qml_str.replace( "s_key_study_action_o_text2", answer )
+    qml_str = qml_str.replace( "s_key_study_action_o_text3", "" )
+
+    if item_pos > 1:
+        prev_page = item_pos - 1
+    else:
+        prev_page = 0
+    if item_pos < item_count-1:
+        next_page = item_pos + 1
+    else:
+        next_page = item_count - 1
+    qml_str = qml_str.replace( "s_key_study_action_o_prev_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], prev_page ) )
+    qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
+
+    #cmd( "sound", sound )
+
+    cmd( "set_quit", "up_dir key_study %s"%dir )
+    #print qml_str
+    return qml_str
 def get_text_book_string_key_study_k( str ):
     global g_zf
     global g_rand_value
@@ -2989,7 +3734,6 @@ def get_text_book_string_key_study_k( str ):
     sound = item.attribute( 'sound' ) 
     en = item.attribute( 'en' ) 
     cn = item.attribute( 'cn' )
-
     qml_str = s_key_study_action_k
     qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
     #pos = int(pos)
@@ -3014,6 +3758,73 @@ def get_text_book_string_key_study_k( str ):
     cmd( "set_quit", "up_dir key_study %s"%dir )
     #print qml_str
     return qml_str
+def get_text_book_string_key_study_c( str ):
+    global g_zf
+    global g_rand_value
+    global g_text_book_now_page
+    item_pos = 0
+    cmds = str.split(' ')
+    if len( cmds ) >= 5:
+        item_pos = int( cmds[4] )
+    #_d( cmds[1] )
+    #_d( cmds[2] )
+    #_d( cmds[3] )
+    rc = g_text_book_data.elementsByTagName( cmds[1] ).at(0).toElement()
+    rc = rc.nextSibling().toElement()
+    task = rc.childNodes().at( int(cmds[2]) ).toElement()
+    dir = task.attribute( 'dir' )
+    item_count = task.childNodes().count()
+    _d( item_count )
+    item = task.childNodes().at( item_pos ).toElement()
+    sound = item.attribute( 'sound' ) 
+    mov = item.attribute( 'mov' )
+    cn = item.attribute( 'cn' )
+    en = sound
+
+    qml_str = s_key_study_action_b 
+    qml_str = qml_str.replace( "s_key_study_action_o_dir", dir )
+    qml_str = qml_str.replace( "s_key_study_action_o_text1", en )
+    qml_str = qml_str.replace( "s_key_study_action_o_text2", cn )
+    qml_str = qml_str.replace( "s_key_study_action_o_text3", "" )
+
+    if item_pos > 1:
+        prev_page = item_pos - 1
+    else:
+        prev_page = 0
+    if item_pos < item_count-1:
+        next_page = item_pos + 1
+    else:
+        next_page = item_count - 1
+    qml_str = qml_str.replace( "s_key_study_action_o_prev_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], prev_page ) )
+    qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
+
+    fn = mov
+    fn = fn.lower()
+    try:
+        buf = zf_extractfile( g_zf, fn )
+    except:
+        buf = get_qml_file_data_by_qt( "images/bird.png" )
+    try:
+        os.remove( "tmp/tmp%d.jpg"%g_rand_value )
+    except:
+        print "del error"
+    g_rand_value = random.randint( 10000000, 99999999 )
+    f = open( "tmp/tmp%d.jpg"%g_rand_value, "wb" )
+    #print "========================"
+    #print f
+    #print "========================"
+    f.write( buf )
+    f.close()
+    bg = "file:///%s/tmp/tmp%d.jpg"%(os.getcwd(), g_rand_value)
+    bg = bg.replace( "\\", "/" )
+    _d( bg )
+    qml_str = qml_str.replace( "s_text_book_page_bg_file", bg )
+    cmd( "sound", sound )
+
+    cmd( "set_quit", "up_dir key_study %s"%dir )
+    #print qml_str
+    return qml_str
+
 def get_text_book_string_key_study_b( str ):
     global g_zf
     global g_rand_value
@@ -3055,6 +3866,7 @@ def get_text_book_string_key_study_b( str ):
     qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
 
     fn = mov
+    fn = fn.lower()
     buf = zf_extractfile( g_zf, fn )
     try:
         os.remove( "tmp/tmp%d.jpg"%g_rand_value )
@@ -3104,7 +3916,7 @@ def get_text_book_string_key_study_m( str ):
         en_cn_list.append( [en,cn] )
     #Cell{color:"black";x:300;y:200; cn:"q"}
     #Cell{color:"red";x:100;y:100}
-    cell_color = ['gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen', 'gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen']
+    cell_color = ['gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen', 'gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen','gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen', 'gainsboro', 'goldenrod', 'greenyellow', 'khaki', 'lightblue', 'lightseagreen', 'lightsteelblue', 'lime', 'magenta', 'mediumorchid', 'olivedrab', 'orchid', 'papayawhip', 'skyblue', 'springgreen', 'tomato', 'violet', 'yellowgreen']
     y = 100
     for c in en_cn_list:
         tstr = "Cell{color:'black';x:500;y:%d; en:'%s'; cn:'%s' }\n"%( y, file_name_tran(c[0]), c[1] )
@@ -3120,11 +3932,15 @@ def get_text_book_string_key_study_m( str ):
     for i in range( len(en_cn_list) ):
         #pos = random.randint( 0, len(en_cn_list)-1 )
         pos = i
-        _d(pos)
+        #_d(pos)
         tstr = "Cell{color:'%s';x:100;y:%d; en:'%s';  }\n"%( cell_color[i], y,  file_name_tran( en_cn_list[pos][0] ) )
         qml_str += tstr
         y += 50
-    qml_str += "\n}\n"
+    qml_str += """
+        ExitIcon{ x:960;y:580; cmd:path + "../main.qml" }
+        QuitIcon{ x:960;y:10; cmd:path + "../main.qml" }
+    }
+    """
     #print qml_str
     return qml_str
 
@@ -3174,7 +3990,7 @@ def get_text_book_string_key_study_h( str ):
     cmd( "set_quit", "up_dir key_study %s"%dir )
     #print qml_str
     return qml_str
-def get_text_book_string_key_study_b( str ):
+def get_text_book_string_key_study_b_2( str ):
     global g_zf
     global g_rand_value
     global g_text_book_now_page
@@ -3215,6 +4031,7 @@ def get_text_book_string_key_study_b( str ):
     qml_str = qml_str.replace( "s_key_study_action_o_next_page", 'key_study %s %s %s %d'%( cmds[1],cmds[2],cmds[3], next_page ) )
 
     fn = mov
+    fn = fn.lower()
     buf = zf_extractfile( g_zf, fn )
     try:
         os.remove( "tmp/tmp%d.jpg"%g_rand_value )
@@ -3311,16 +4128,24 @@ def get_text_book_string( str ):
             #_d( cmds[3] )
             if cmds[3] == 'l':
                 return get_text_book_string_key_study( str )
-            elif cmds[3] == 'o':
+            elif cmds[3] == 'o' or cmds[3] == 'a':
                 return get_text_book_string_key_study_o( str )
             elif cmds[3] == 'k':
                 return get_text_book_string_key_study_k( str )
+            elif cmds[3] == 'f':
+                return get_text_book_string_key_study_f( str )
+            elif cmds[3] == 'j':
+                return get_text_book_string_key_study_j( str )
+            elif cmds[3] == 'c':
+                return get_text_book_string_key_study_c( str )
             elif cmds[3] == 'b':
                 return get_text_book_string_key_study_b( str )
             elif cmds[3] == 'm':
                 return get_text_book_string_key_study_m( str )
             elif cmds[3] == 'h':
                 return get_text_book_string_key_study_h( str )
+            elif cmds[3] == 'd':
+                return get_text_book_string_key_study_d( str )
         else:
             return get_text_book_string_key_study( str )
     return ""
@@ -3443,10 +4268,10 @@ def read_user_password():
         g_remeber_pawword = chop( lines[1] )
         g_user = chop( lines[2] )
         g_password = chop( lines[3] )
-        _d( g_auto_login )
-        _d( g_remeber_password )
-        _d( g_user )
-        _d( g_password )
+        #_d( g_auto_login )
+        #_d( g_remeber_password )
+        #_d( g_user )
+        #_d( g_password )
 
 
 def get_qml_login_string():
@@ -3494,6 +4319,7 @@ def get_qml( type_str, str ):
     global g_text_book_now_page
     global g_text_book_data
     global g_quit_command
+    global g_sys_path
     #print "type_str=%s,str=%s."%(type_str,str)
 
     qml_str = ""
@@ -3523,7 +4349,9 @@ def get_qml( type_str, str ):
         if( len(items) < 2):
             type_str = "dir"
         elif str.endswith("swf") :
-            system_cmd = "flash.exe \"%s%s\""%( "", str )
+            #system_cmd = "flash.exe \"%s%s\""%( "", str )
+            str = str.replace( "/", "\\" )
+            system_cmd = "flash.exe \"%s\\%s\""%( g_sys_path, str )
             _d( system_cmd )
             os.system( system_cmd.encode('gbk') )
             type_str = "up_dir"
@@ -3635,7 +4463,7 @@ def get_qml( type_str, str ):
     elif( type_str == "show_login" ):
         g_qml_lastest_string_list.append( "menu/main.qml" )
         qml_str = get_qml_login_string()
-        print qml_str
+        #print qml_str
     elif( type_str == "dir" ):
         qml_str = get_qml_dir_string( str )
     elif( type_str == "test" ):
@@ -3664,14 +4492,20 @@ def get_qml( type_str, str ):
     return qml_str
 
 def dot_reader_special_command( str ):
-    str = str.split( ',' )[0]
+    _d( str )
+    iis = str.split( ',' )
+    str = iis[0]
+    r_str = ""
+    if len( iis ) >= 2:
+        r_str = iis[1].encode( 'utf8' )
     type = "auto"
     _d( str )
+    _d( r_str )
     char = str[2:3]
-    _d( char )
+    #_d( char )
     str = str.encode( 'utf8' )
-    _d( str )
-    _d( "三字经" )
+    #_d( str )
+    #_d( "三字经" )
     if str == ":三字经":
         str = "data/三字经"
     elif str == ":千字文":
@@ -3695,9 +4529,15 @@ def dot_reader_special_command( str ):
         str = "user/小学/电子课本"
     elif str == ":词典":
         str = "menu/dicts/main.qml"
-    elif str == ":音量加":
+    elif r_str == ":音量加":
+        sys_cmd = "nircmd.exe changesysvolume 5000"
+        _d( sys_cmd )
+        os.system( sys_cmd )
         return ""
-    elif str == ":音量减":
+    elif r_str == ":音量减":
+        sys_cmd = "nircmd.exe changesysvolume -5000"
+        _d( sys_cmd )
+        os.system( sys_cmd )
         return ""
     elif char[0] >= 'a' and char[0] <= 'z' :
         _d( char )
@@ -3706,7 +4546,10 @@ def dot_reader_special_command( str ):
         #get_qml( "auto", fn )
         str = package_file_deal( fn )
         if str.endswith("swf") :
-            system_cmd = "flash.exe \"%s%s\""%( "", str )
+            #system_cmd = "flash.exe \"%s%s\""%( "", str )
+            str = str.replace( "/", "\\" )
+            system_cmd = "flash.exe \"%s\\%s\""%( g_sys_path, str )
+            _d( system_cmd )
             os.system( system_cmd.encode('gbk') )
         return ''
     _d( type )
@@ -3977,6 +4820,12 @@ def login_test():
 
 if __name__ == '__main__':
 
+    g_sys_path = os.path.abspath( __file__ ) 
+    iis = g_sys_path.split( '\\' )
+    iis.pop()
+    g_sys_path = '\\'.join( iis )
+    print g_sys_path
+
     #login_test()
     read_user_password()
 
@@ -4025,6 +4874,7 @@ if __name__ == '__main__':
             cmd( "show_login", "" )
     else:
         cmd( "show", "menu/main.qml" )
+        #cmd( "dir", "data/百科知识" )
     #cmd( "show", "menu/dicts/main.qml" )
     #cmd( "dict", "新英汉" )
     #cmd( "show", "menu/primary_school/funs/encyclopedic/main.qml" )

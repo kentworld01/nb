@@ -21,6 +21,12 @@ Rectangle {
         id: icon_list_bg
         source: bg
         anchors.centerIn: parent 
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                console.log( "key_study click" )
+            }
+        }
 
         Component {
             id: appDelegate

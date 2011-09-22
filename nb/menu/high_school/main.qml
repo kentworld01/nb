@@ -20,6 +20,7 @@ Rectangle {
         ListElement { name: "地理"; icon: "images/首页/地理.png";  cmd_type: "dir"; cmd: "user/中学/九门功课/地理"}
         ListElement { name: "政治"; icon: "images/首页/政治.png";  cmd_type: "dir"; cmd: "user/中学/九门功课/政治"}
         ListElement { name: "生物"; icon: "images/首页/生物.png";  cmd_type: "dir"; cmd: "user/中学/九门功课/生物"}
+        ListElement { name: "视频教学"; icon: "images/首页/视频教学.png";  cmd_type: "dir"; cmd: "user/小学/动漫教学"}
     }
     IconList{ board_x:200; board_y:150; board_width:600; board_height:500; bg: "images/中学主界面.jpg"; listItem: appModel }
     ExitIcon{ x:960;y:700; cmd:"menu/main.qml" }
